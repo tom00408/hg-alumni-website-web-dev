@@ -101,15 +101,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { useEventsStore } from '../stores/events'
+import { useNewsStore } from '../stores/news'
 import HgCard from '../components/HgCard.vue'
 import EventItem from '../components/EventItem.vue'
 import NewsCard from '../components/NewsCard.vue'
 import type { Event, NewsArticle } from '../lib/types'
 
-// Mock data für Development
-const upcomingEvents = ref<Event[]>([])
-const latestNews = ref<NewsArticle[]>([])
+// Stores verwenden
+const eventsStore = useEventsStore()
+const newsStore = useNewsStore()
+
+// Daten aus den Stores
+const upcomingEvents = eventsStore.nextUpcomingEvents
+const latestNews = newsStore.latestArticles
 
 const quickNavItems = [
   {
@@ -175,8 +181,15 @@ const shareArticle = (article: NewsArticle) => {
 }
 
 onMounted(async () => {
-  // TODO: Lade echte Daten von Firebase
-  // Hier werden später die Stores verwendet
+  // Lade Daten von den Stores
+  try {
+    await Promise.all([
+      eventsStore.fetchEvents(),
+      newsStore.fetchArticles()
+    ])
+  } catch (error) {
+    console.error('Error loading data:', error)
+  }
 })
 </script>
 

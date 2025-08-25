@@ -261,8 +261,9 @@ const submitApplication = async () => {
   submitting.value = true
   
   try {
-    // TODO: Sende Daten an Firebase
-    const application: Omit<MembershipApplication, 'id' | 'createdAt'> = {
+    const { createMembershipApplication } = await import('../services/membership')
+    
+    const application = {
       name: `${form.firstName} ${form.lastName}`,
       email: form.email,
       graduationYear: form.graduationYear || undefined,
@@ -272,8 +273,12 @@ const submitApplication = async () => {
     
     console.log('Submitting application:', application)
     
-    // Simuliere API-Call
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    if (import.meta.env.VITE_USE_MOCK_DATA === 'true') {
+      // Simuliere API-Call für Mock-Daten
+      await new Promise(resolve => setTimeout(resolve, 2000))
+    } else {
+      await createMembershipApplication(application)
+    }
     
     submitted.value = true
     

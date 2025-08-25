@@ -9,18 +9,18 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="loading-state">
+    <div v-if="galleryStore.loading" class="loading-state">
       <div class="loading-spinner"></div>
       <p>Bilder werden geladen...</p>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="error-state">
+    <div v-else-if="galleryStore.error" class="error-state">
       <HgCard variant="secondary">
         <div class="error-content">
           <h3>Fehler beim Laden der Galerie</h3>
-          <p>{{ error }}</p>
-          <button class="btn-primary" @click="loadImages">
+          <p>{{ galleryStore.error }}</p>
+          <button class="btn-primary" @click="galleryStore.fetchImages()">
             Erneut versuchen
           </button>
         </div>
@@ -28,10 +28,10 @@
     </div>
 
     <!-- Gallery Grid -->
-    <div v-else-if="images.length" class="gallery-container">
+    <div v-else-if="galleryStore.images.length" class="gallery-container">
       <div class="gallery-grid">
         <div 
-          v-for="(image, index) in images" 
+          v-for="(image, index) in galleryStore.images" 
           :key="image.id"
           class="gallery-item"
           @click="openLightbox(index)"
@@ -56,13 +56,13 @@
       </div>
       
       <!-- Load More Button -->
-      <div v-if="hasMore" class="load-more-section">
+      <div v-if="galleryStore.hasMore" class="load-more-section">
         <button 
           class="btn-secondary btn-large"
           @click="loadMore"
-          :disabled="loadingMore"
+          :disabled="galleryStore.loading"
         >
-          <span v-if="loadingMore">Lädt...</span>
+          <span v-if="galleryStore.loading">Lädt...</span>
           <span v-else>Weitere Bilder laden</span>
         </button>
       </div>
@@ -142,58 +142,21 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useGalleryStore } from '../stores/gallery'
 import HgCard from '../components/HgCard.vue'
 import type { GalleryImage } from '../lib/types'
 
-const loading = ref(false)
-const loadingMore = ref(false)
-const error = ref<string | null>(null)
-const images = ref<GalleryImage[]>([])
-const hasMore = ref(false)
-const currentPage = ref(1)
-const pageSize = 12
+const galleryStore = useGalleryStore()
 
 const lightboxOpen = ref(false)
 const currentImageIndex = ref(0)
 
 const currentImage = computed(() => {
-  return images.value[currentImageIndex.value]
+  return galleryStore.images[currentImageIndex.value]
 })
 
-const loadImages = async (page = 1) => {
-  if (page === 1) {
-    loading.value = true
-  } else {
-    loadingMore.value = true
-  }
-  
-  error.value = null
-  
-  try {
-    // TODO: Lade echte Daten von Firebase
-    // Hier werden später die Stores verwendet
-    
-    // Mock-Implementierung
-    if (page === 1) {
-      images.value = []
-    }
-    
-    // Simuliere Paginierung
-    hasMore.value = false // Erstmal keine weiteren Bilder
-    
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Ein unbekannter Fehler ist aufgetreten'
-  } finally {
-    loading.value = false
-    loadingMore.value = false
-  }
-}
-
 const loadMore = async () => {
-  if (loadingMore.value || !hasMore.value) return
-  
-  currentPage.value++
-  await loadImages(currentPage.value)
+  await galleryStore.loadMore()
 }
 
 const openLightbox = (index: number) => {
@@ -208,12 +171,12 @@ const closeLightbox = () => {
 }
 
 const nextImage = () => {
-  currentImageIndex.value = (currentImageIndex.value + 1) % images.value.length
+  currentImageIndex.value = (currentImageIndex.value + 1) % galleryStore.images.length
 }
 
 const previousImage = () => {
   currentImageIndex.value = currentImageIndex.value === 0 
-    ? images.value.length - 1 
+    ? galleryStore.images.length - 1 
     : currentImageIndex.value - 1
 }
 
@@ -233,8 +196,8 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 }
 
-onMounted(() => {
-  loadImages()
+onMounted(async () => {
+  await galleryStore.fetchImages()
   document.addEventListener('keydown', handleKeydown)
 })
 

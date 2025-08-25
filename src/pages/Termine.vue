@@ -50,18 +50,18 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="loading-state">
+    <div v-if="eventsStore.loading" class="loading-state">
       <div class="loading-spinner"></div>
       <p>Termine werden geladen...</p>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="error-state">
+    <div v-else-if="eventsStore.error" class="error-state">
       <HgCard variant="secondary">
         <div class="error-content">
           <h3>Fehler beim Laden der Termine</h3>
-          <p>{{ error }}</p>
-          <button class="btn-primary" @click="loadEvents">
+          <p>{{ eventsStore.error }}</p>
+          <button class="btn-primary" @click="eventsStore.fetchEvents()">
             Erneut versuchen
           </button>
         </div>
@@ -110,13 +110,12 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useEventsStore } from '../stores/events'
 import HgCard from '../components/HgCard.vue'
 import EventItem from '../components/EventItem.vue'
 import type { Event } from '../lib/types'
 
-const loading = ref(false)
-const error = ref<string | null>(null)
-const events = ref<Event[]>([])
+const eventsStore = useEventsStore()
 const activeFilter = ref<'all' | 'upcoming' | 'past'>('upcoming')
 const viewMode = ref<'grid' | 'list'>('grid')
 
@@ -127,17 +126,13 @@ const filterOptions = [
 ]
 
 const filteredEvents = computed(() => {
-  const now = new Date()
-  
   switch (activeFilter.value) {
     case 'upcoming':
-      return events.value.filter(event => event.date.toDate() >= now)
-        .sort((a, b) => a.date.toMillis() - b.date.toMillis())
+      return eventsStore.upcomingEvents
     case 'past':
-      return events.value.filter(event => event.date.toDate() < now)
-        .sort((a, b) => b.date.toMillis() - a.date.toMillis())
+      return eventsStore.pastEvents
     default:
-      return events.value.sort((a, b) => a.date.toMillis() - b.date.toMillis())
+      return eventsStore.events
   }
 })
 
@@ -150,23 +145,8 @@ const viewEventDetails = (event: Event) => {
   console.log('View event details:', event)
 }
 
-const loadEvents = async () => {
-  loading.value = true
-  error.value = null
-  
-  try {
-    // TODO: Lade echte Daten von Firebase
-    // Hier werden später die Stores verwendet
-    events.value = []
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Ein unbekannter Fehler ist aufgetreten'
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(() => {
-  loadEvents()
+onMounted(async () => {
+  await eventsStore.fetchEvents()
 })
 </script>
 

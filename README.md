@@ -1,204 +1,389 @@
-# Alumni-Website des Hainberg-Gymnasiums
+# 🎓 Alumni-Website des Hainberg-Gymnasiums
 
-Eine moderne Vue.js-basierte Website für den Alumni-Verein des Hainberg-Gymnasiums Göttingen.
+Eine moderne, responsive Vue.js-Anwendung für den Alumni-Verein des Hainberg-Gymnasiums Göttingen. Die Website ermöglicht es ehemaligen Schülern, sich zu vernetzen, über Veranstaltungen zu informieren und mit der Schule in Kontakt zu bleiben.
 
-## 🎯 Features
+![Vue.js](https://img.shields.io/badge/Vue.js-3.5.18-4FC08D?style=flat&logo=vue.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=flat&logo=typescript)
+![Firebase](https://img.shields.io/badge/Firebase-10.7.1-FFCA28?style=flat&logo=firebase)
+![Pinia](https://img.shields.io/badge/Pinia-2.1.7-FFD859?style=flat&logo=pinia)
 
-- **Vue 3 + TypeScript + Vite** - Moderne Entwicklungsumgebung
-- **Responsive Design** - Funktioniert auf Desktop, Tablet und Mobile
-- **Firebase Integration** - Backend für Daten und Storage
-- **Pinia State Management** - Zentrale Datenverwaltung
-- **Vue Router** - Deutsche URLs und SPA-Navigation
-- **Custom CSS** - Eigenes Design-System ohne externe UI-Frameworks
+## ✨ Features
 
-## 🚀 Projekt-Setup
+### 🏗️ **Technologie-Stack**
+- **Vue 3** mit Composition API und `<script setup>`
+- **TypeScript** für vollständige Typsicherheit
+- **Vite** als Build-Tool für schnelle Entwicklung
+- **Pinia** für modernes State Management
+- **Vue Router** mit deutschen URLs
+- **Firebase** für Backend und Hosting
 
-### Voraussetzungen
+### 🎨 **Design & UX**
+- **Responsive Design** - Optimiert für Desktop, Tablet und Mobile
+- **Eigenes Design-System** - Kein externes UI-Framework
+- **Accessibility** - WCAG-konforme Implementierung
+- **Smooth Animations** - Moderne Micro-Interactions
+- **Progressive Enhancement** - Funktioniert auch ohne JavaScript
 
-- Node.js (Version 16 oder höher)
-- npm oder yarn
+### 📱 **Funktionalitäten**
+- **Startseite** mit Hero-Section und schneller Navigation
+- **Termine** - Events mit Filter- und Sortieroptionen
+- **Neues im Verein** - News-System mit Paginierung
+- **Galerie** - Bildergalerie mit Lightbox-Funktion
+- **Mitglied werden** - Anmeldeformular mit Validierung
+- **Responsive Navigation** - Sidebar (Desktop) / Drawer (Mobile)
 
-### Installation
+## 🚀 Schnellstart
 
-1. Repository klonen oder Code herunterladen
-2. Dependencies installieren:
+### 📋 **Voraussetzungen**
+- **Node.js** (Version 18+ empfohlen)
+- **npm** oder **yarn**
+- Moderne Browser (Chrome 90+, Firefox 88+, Safari 14+)
+
+### ⚡ **Installation & Start**
 
 ```bash
+# 1. Repository klonen
+git clone <repository-url>
+cd AlumniWebsite
+
+# 2. Dependencies installieren
 npm install
-```
 
-3. Umgebungsvariablen konfigurieren:
-
-Kopieren Sie `env.template` zu `.env` und tragen Sie Ihre Firebase-Konfiguration ein:
-
-```bash
-cp env.template .env
-```
-
-Bearbeiten Sie die `.env` Datei mit Ihren Firebase-Credentials:
-
-```env
-VITE_FIREBASE_API_KEY=your_api_key_here
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
-VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
-
-# Für Development mit Mock-Daten (ohne Firebase)
-VITE_USE_MOCK_DATA=true
-```
-
-### Development Server starten
-
-```bash
+# 3. Development Server starten
 npm run dev
+
+# 4. Browser öffnen: http://localhost:5173
 ```
 
-Die Anwendung ist dann unter `http://localhost:5173` verfügbar.
+### 🔧 **Konfiguration**
 
-### Production Build
+#### **Für Development (mit Mock-Daten):**
+```bash
+# .env Datei erstellen
+echo "VITE_USE_MOCK_DATA=true" > .env
+```
+
+#### **Für Production (mit Firebase):**
+```bash
+# env.template zu .env kopieren
+cp env.template .env
+
+# Firebase-Konfiguration eintragen
+# VITE_FIREBASE_API_KEY=your_api_key_here
+# VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+# VITE_FIREBASE_PROJECT_ID=your_project_id
+# VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+# VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+# VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
+```
+
+### 🏗️ **Build-Kommandos**
 
 ```bash
+# Development Server
+npm run dev
+
+# Production Build
 npm run build
-```
 
-### Preview der Production-Version
-
-```bash
+# Build Preview
 npm run preview
+
+# Type Check
+npm run type-check
 ```
 
-## 🏗️ Projektstruktur
+## 📁 Projektstruktur
 
 ```
-src/
-├── components/          # Wiederverwendbare UI-Komponenten
-│   ├── AppSidebar.vue   # Navigation
-│   ├── AppHeader.vue    # Mobile Header
-│   ├── HgCard.vue       # Standard Card-Komponente
-│   ├── EventItem.vue    # Event-Anzeige
-│   └── NewsCard.vue     # News-Artikel-Card
-├── layouts/             # Layout-Komponenten
-│   └── DefaultLayout.vue
-├── pages/               # Seiten-Komponenten
-│   ├── Startseite.vue
-│   ├── Termine.vue
-│   ├── News.vue
-│   ├── Galerie.vue
-│   ├── MitgliedWerden.vue
-│   ├── Impressum.vue
-│   └── NotFound.vue
-├── stores/              # Pinia State Management
-│   ├── events.ts
-│   ├── news.ts
-│   └── gallery.ts
-├── services/            # Firebase Services
-│   ├── events.ts
-│   └── membership.ts
-├── lib/                 # Utilities und Konfiguration
-│   ├── firebase.ts      # Firebase Setup
-│   ├── types.ts         # TypeScript Typen
-│   └── mockData.ts      # Mock-Daten für Development
-├── styles/              # Globale Styles
-│   └── theme.css        # Design-System und CSS-Variablen
-├── router/              # Vue Router Konfiguration
-│   └── index.ts
-└── main.ts              # App Entry Point
+AlumniWebsite/
+├── 📂 public/                  # Statische Assets
+│   └── vite.svg
+├── 📂 src/
+│   ├── 📂 components/          # 🧩 Wiederverwendbare UI-Komponenten
+│   │   ├── AppSidebar.vue      # 🧭 Haupt-Navigation (Desktop/Mobile)
+│   │   ├── AppHeader.vue       # 📱 Mobile Header mit Hamburger-Menü
+│   │   ├── HgCard.vue          # 🃏 Basis Card-Komponente
+│   │   ├── EventItem.vue       # 📅 Event-Darstellung
+│   │   └── NewsCard.vue        # 📰 News-Artikel-Card
+│   ├── 📂 layouts/             # 🏗️ Layout-Templates
+│   │   └── DefaultLayout.vue   # Standard-Layout mit Sidebar
+│   ├── 📂 pages/               # 📄 Seiten-Komponenten (Routes)
+│   │   ├── Startseite.vue      # 🏠 Homepage mit Hero-Section
+│   │   ├── Termine.vue         # 📅 Events mit Filter/Suche
+│   │   ├── News.vue            # 📰 News-Übersicht
+│   │   ├── Galerie.vue         # 🖼️ Bildergalerie mit Lightbox
+│   │   ├── MitgliedWerden.vue  # ➕ Mitgliedschaftsformular
+│   │   ├── Impressum.vue       # ℹ️ Rechtliche Informationen
+│   │   └── NotFound.vue        # ❌ 404-Fehlerseite
+│   ├── 📂 stores/              # 🏪 Pinia State Management
+│   │   ├── events.ts           # Events-Store (CRUD + Filter)
+│   │   ├── news.ts             # News-Store (Artikel + Paginierung)
+│   │   └── gallery.ts          # Gallery-Store (Bilder + Upload)
+│   ├── 📂 services/            # 🔧 Backend-Services
+│   │   ├── events.ts           # Firebase Events-CRUD
+│   │   ├── news.ts             # Firebase News-CRUD
+│   │   ├── gallery.ts          # Firebase Storage + Firestore
+│   │   └── membership.ts       # Mitgliedschaftsanträge
+│   ├── 📂 lib/                 # 🛠️ Utilities & Konfiguration
+│   │   ├── firebase.ts         # Firebase SDK Setup
+│   │   ├── types.ts            # TypeScript Interface-Definitionen
+│   │   └── mockData.ts         # Entwicklungs-Mock-Daten
+│   ├── 📂 styles/              # 🎨 Design-System
+│   │   └── theme.css           # CSS Custom Properties & Utilities
+│   ├── 📂 router/              # 🛣️ Vue Router Konfiguration
+│   │   └── index.ts            # Route-Definitionen
+│   ├── main.ts                 # 🚀 App Entry Point
+│   ├── App.vue                 # 📱 Root-Komponente
+│   └── style.css               # 🎨 Globale Styles
+├── 📋 package.json             # Dependencies & Scripts
+├── 🔧 vite.config.ts           # Vite-Konfiguration
+├── 📝 tsconfig.json            # TypeScript-Konfiguration
+├── 🔒 env.template             # Umgebungsvariablen-Template
+└── 📖 README.md                # Diese Datei
 ```
 
 ## 🎨 Design-System
 
-Das Projekt verwendet ein eigenes CSS-basiertes Design-System mit:
-
-- **CSS Custom Properties** für konsistente Farben und Abstände
-- **Mobile-First** responsive Design
-- **Accessibility** Features (Focus-Styles, ARIA-Labels)
-- **Dark/Light Mode** vorbereitet (noch nicht implementiert)
-
-### Farbpalette
-
-- `--color-primary: #5362FE` (Hauptfarbe für Links und Buttons)
-- `--color-secondary: #07488F` (Sidebar und Headlines)
-- `--color-accent: #486DB9` (Hover-States)
-- `--color-info: #0662BE` (Info-Elemente)
-- `--color-bg: #AEB7FB` (Hintergrund-Gradient)
-
-## 🔥 Firebase Setup
-
-### Firestore Collections
-
-Das Projekt nutzt folgende Firestore-Collections:
-
-- `events` - Termine und Veranstaltungen
-- `news` - Nachrichten und Artikel
-- `gallery` - Galerie-Bilder
-- `membershipApplications` - Mitgliedschaftsanträge
-
-### Storage Structure
-
-```
-storage/
-└── gallery/
-    ├── original/     # Original-Bilder
-    └── thumbnails/   # Thumbnail-Versionen
+### 🌈 **Farbpalette**
+```css
+/* Hainberg-Gymnasium Markenfarben */
+--color-primary: #5362FE     /* Hauptfarbe (Links, Buttons) */
+--color-secondary: #07488F   /* Sidebar, Headlines */
+--color-accent: #486DB9      /* Hover-States, Highlights */
+--color-info: #0662BE        /* Info-Elemente */
+--color-bg: #AEB7FB          /* Hintergrund-Gradient */
+--color-text: #454443        /* Haupttext */
 ```
 
-### Security Rules (Beispiel)
+### 📐 **Layout-System**
+- **CSS Grid & Flexbox** für moderne Layouts
+- **Custom Properties** für konsistente Abstände
+- **Mobile-First** Responsive Design
+- **Fluid Typography** mit clamp()
 
+### 📱 **Responsive Breakpoints**
+- **Mobile**: `< 768px` (Hamburger-Menü)
+- **Tablet**: `768px - 1023px` (Collapsible Sidebar)
+- **Desktop**: `≥ 1024px` (Persistente Sidebar)
+
+### ♿ **Accessibility Features**
+- **WCAG 2.1 AA** konform
+- **Keyboard Navigation** vollständig unterstützt
+- **Screen Reader** optimiert
+- **Focus Management** für SPA-Navigation
+- **High Contrast** Support
+
+## 🔥 Firebase Backend
+
+### 📊 **Firestore Collections**
+```typescript
+// 📅 Events Collection
+interface Event {
+  id: string
+  title: string
+  date: Timestamp
+  location?: string
+  description?: string
+  isFeatured?: boolean
+  createdAt: Timestamp
+}
+
+// 📰 News Collection  
+interface NewsArticle {
+  id: string
+  title: string
+  slug: string
+  date: Timestamp
+  excerpt: string
+  content: string
+  coverUrl?: string
+  tags?: string[]
+  createdAt: Timestamp
+}
+
+// 🖼️ Gallery Collection
+interface GalleryImage {
+  id: string
+  title?: string
+  imageUrl: string
+  thumbnailUrl?: string
+  createdAt: Timestamp
+}
+
+// ➕ Membership Applications
+interface MembershipApplication {
+  id: string
+  name: string
+  email: string
+  graduationYear?: number
+  relation?: string
+  message?: string
+  status: 'pending' | 'approved' | 'rejected'
+  createdAt: Timestamp
+}
+```
+
+### 🗂️ **Storage Structure**
+```
+📁 Firebase Storage
+└── 📁 gallery/
+    ├── 📁 original/        # Hochauflösende Original-Bilder
+    ├── 📁 thumbnails/      # Optimierte Thumbnail-Versionen
+    └── 📁 compressed/      # Web-optimierte Versionen
+```
+
+### 🔒 **Security Rules**
 ```javascript
-// Firestore Rules
+// Firestore Security Rules
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Öffentlicher Lesezugriff für Events, News und Gallery
+    // Öffentlicher Lesezugriff
     match /{collection}/{document} {
       allow read: if collection in ['events', 'news', 'gallery'];
     }
     
-    // Mitgliedschaftsanträge nur schreiben erlaubt
+    // Mitgliedschaftsanträge (nur erstellen)
     match /membershipApplications/{document} {
-      allow create: if true;
+      allow create: if isValidApplication();
+    }
+  }
+}
+
+// Storage Security Rules
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null; // Nur für Admins
     }
   }
 }
 ```
 
-## 📱 Responsive Breakpoints
+## 🛠️ Development Guide
 
-- **Desktop**: >= 1024px (Sidebar sichtbar)
-- **Tablet**: 768px - 1023px (Sidebar als Drawer)
-- **Mobile**: < 768px (Mobile Navigation)
+### 🧪 **Mock-Daten für lokale Entwicklung**
+```bash
+# .env konfigurieren für Development ohne Firebase
+echo "VITE_USE_MOCK_DATA=true" > .env
 
-## 🛠️ Development
+# Enthält 5 Demo-Events, 4 News-Artikel, 8 Galerie-Bilder
+npm run dev
+```
 
-### Mit Mock-Daten arbeiten
+### 🧩 **Neue Komponenten erstellen**
+```bash
+# 1. Komponente erstellen
+touch src/components/MyComponent.vue
 
-Setzen Sie `VITE_USE_MOCK_DATA=true` in Ihrer `.env` Datei, um ohne Firebase zu entwickeln.
+# 2. TypeScript + Composition API verwenden
+# 3. CSS Custom Properties nutzen  
+# 4. Props/Emits typisieren
+```
 
-### Neue Komponenten hinzufügen
+### 📄 **Neue Seiten hinzufügen**
+```typescript
+// 1. Seite erstellen: src/pages/NeueSeite.vue
+// 2. Route registrieren: src/router/index.ts
+{
+  path: '/neue-seite',
+  name: 'neue-seite', 
+  component: () => import('../pages/NeueSeite.vue'),
+  meta: { title: 'Neue Seite' }
+}
 
-1. Erstellen Sie die Komponente in `src/components/`
-2. Verwenden Sie TypeScript und `<script setup>`
-3. Nutzen Sie CSS Custom Properties für Styling
-4. Exportieren Sie Types wenn nötig
+// 3. Navigation erweitern: src/components/AppSidebar.vue
+```
 
-### Neue Seiten hinzufügen
+### 🏪 **Store hinzufügen**
+```typescript
+// src/stores/myStore.ts
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 
-1. Erstellen Sie die Komponente in `src/pages/`
-2. Fügen Sie die Route in `src/router/index.ts` hinzu
-3. Aktualisieren Sie die Navigation in `AppSidebar.vue`
+export const useMyStore = defineStore('myStore', () => {
+  // State
+  const data = ref([])
+  const loading = ref(false)
+  
+  // Getters  
+  const filteredData = computed(() => data.value.filter(...))
+  
+  // Actions
+  const fetchData = async () => { /* ... */ }
+  
+  return { data, loading, filteredData, fetchData }
+})
+```
 
-## 📋 TODO / Roadmap
+## 🚀 Deployment
 
-- [ ] Admin-Panel für Content-Management
-- [ ] Benutzer-Authentication
-- [ ] Event-Detail-Ansichten
-- [ ] Newsletter-Anmeldung
-- [ ] Erweiterte Suche
-- [ ] PWA-Features
-- [ ] E-Mail-Benachrichtigungen
-- [ ] SEO-Optimierung
+### 📦 **Production Build**
+```bash
+# Build für Production
+npm run build
+
+# Preview des Builds
+npm run preview
+
+# Type-Checking
+npm run type-check
+```
+
+### 🌐 **Firebase Hosting**
+```bash
+# Firebase CLI installieren
+npm install -g firebase-tools
+
+# Login und Projekt initialisieren  
+firebase login
+firebase init hosting
+
+# Deployment
+npm run build
+firebase deploy
+```
+
+### 🐳 **Docker (Optional)**
+```dockerfile
+# Dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+EXPOSE 5173
+CMD ["npm", "run", "preview", "--", "--host"]
+```
+
+## 🔮 Roadmap & Features
+
+### ✅ **Implementiert**
+- [x] **Responsive Design** (Desktop/Tablet/Mobile)
+- [x] **Pinia State Management** mit TypeScript
+- [x] **Firebase Integration** (Firestore + Storage)
+- [x] **Mock-Daten System** für Development
+- [x] **Vue Router** mit deutschen URLs
+- [x] **Accessibility** (WCAG 2.1 AA)
+- [x] **Form Validation** im Mitgliedsformular
+
+### 🔄 **In Arbeit**
+- [ ] **Admin-Dashboard** für Content-Management
+- [ ] **User Authentication** (Google/Email)
+- [ ] **Event-Detail-Seiten** mit RSVP
+- [ ] **Newsletter-System** mit E-Mail-Templates
+
+### 🎯 **Geplant**
+- [ ] **Progressive Web App** (PWA) Features
+- [ ] **Push-Benachrichtigungen** für Events
+- [ ] **Erweiterte Suche** mit Elasticsearch
+- [ ] **SEO-Optimierung** mit Nuxt/SSR
+- [ ] **Multi-Language** Support (EN/DE)
+- [ ] **Dark Mode** Theme
+- [ ] **Analytics Dashboard** für Admins
 
 ## 🤝 Contributing
 

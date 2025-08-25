@@ -9,18 +9,18 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="loading-state">
+    <div v-if="newsStore.loading" class="loading-state">
       <div class="loading-spinner"></div>
       <p>Nachrichten werden geladen...</p>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="error-state">
+    <div v-else-if="newsStore.error" class="error-state">
       <HgCard variant="secondary">
         <div class="error-content">
           <h3>Fehler beim Laden der Nachrichten</h3>
-          <p>{{ error }}</p>
-          <button class="btn-primary" @click="loadNews">
+          <p>{{ newsStore.error }}</p>
+          <button class="btn-primary" @click="newsStore.fetchArticles()">
             Erneut versuchen
           </button>
         </div>
@@ -28,10 +28,10 @@
     </div>
 
     <!-- News Grid -->
-    <div v-else-if="news.length" class="news-container">
+    <div v-else-if="newsStore.articles.length" class="news-container">
       <div class="news-grid">
         <NewsCard 
-          v-for="article in news" 
+          v-for="article in newsStore.articles" 
           :key="article.id"
           :article="article"
           @read-more="readNewsArticle"
@@ -40,13 +40,13 @@
       </div>
       
       <!-- Load More Button -->
-      <div v-if="hasMore" class="load-more-section">
+      <div v-if="newsStore.hasMore" class="load-more-section">
         <button 
           class="btn-secondary btn-large"
           @click="loadMore"
-          :disabled="loadingMore"
+          :disabled="newsStore.loading"
         >
-          <span v-if="loadingMore">Lädt...</span>
+          <span v-if="newsStore.loading">Lädt...</span>
           <span v-else>Weitere Artikel laden</span>
         </button>
       </div>
@@ -73,53 +73,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { useNewsStore } from '../stores/news'
 import HgCard from '../components/HgCard.vue'
 import NewsCard from '../components/NewsCard.vue'
 import type { NewsArticle } from '../lib/types'
 
-const loading = ref(false)
-const loadingMore = ref(false)
-const error = ref<string | null>(null)
-const news = ref<NewsArticle[]>([])
-const hasMore = ref(false)
-const currentPage = ref(1)
-const pageSize = 6
-
-const loadNews = async (page = 1) => {
-  if (page === 1) {
-    loading.value = true
-  } else {
-    loadingMore.value = true
-  }
-  
-  error.value = null
-  
-  try {
-    // TODO: Lade echte Daten von Firebase
-    // Hier werden später die Stores verwendet
-    
-    // Mock-Implementierung
-    if (page === 1) {
-      news.value = []
-    }
-    
-    // Simuliere Paginierung
-    hasMore.value = false // Erstmal keine weiteren Artikel
-    
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Ein unbekannter Fehler ist aufgetreten'
-  } finally {
-    loading.value = false
-    loadingMore.value = false
-  }
-}
+const newsStore = useNewsStore()
 
 const loadMore = async () => {
-  if (loadingMore.value || !hasMore.value) return
-  
-  currentPage.value++
-  await loadNews(currentPage.value)
+  await newsStore.loadMore()
 }
 
 const readNewsArticle = (article: NewsArticle) => {
@@ -158,8 +121,8 @@ const copyToClipboard = async (text: string) => {
   }
 }
 
-onMounted(() => {
-  loadNews()
+onMounted(async () => {
+  await newsStore.fetchArticles()
 })
 </script>
 
