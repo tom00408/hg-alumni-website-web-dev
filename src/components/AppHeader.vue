@@ -4,10 +4,11 @@
       <!-- Mobile Menu Button -->
       <button 
         class="menu-button"
+        :class="{ 'menu-button--active': sidebarOpen }"
         @click="$emit('toggle-sidebar')"
-        aria-label="Menü öffnen"
+        :aria-label="sidebarOpen ? 'Menü schließen' : 'Menü öffnen'"
       >
-        <span class="hamburger">
+        <span class="hamburger" :class="{ 'hamburger--active': sidebarOpen }">
           <span class="hamburger__line"></span>
           <span class="hamburger__line"></span>
           <span class="hamburger__line"></span>
@@ -31,6 +32,14 @@
 </template>
 
 <script setup lang="ts">
+interface Props {
+  sidebarOpen?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  sidebarOpen: false
+})
+
 defineEmits<{
   'toggle-sidebar': []
 }>()
@@ -142,15 +151,33 @@ defineEmits<{
 }
 
 /* Animationen für den Hamburger */
-.menu-button:hover .hamburger__line:nth-child(1) {
+.menu-button:hover .hamburger__line:nth-child(1):not(.hamburger--active .hamburger__line) {
   transform: translateY(-1px);
 }
 
-.menu-button:hover .hamburger__line:nth-child(3) {
+.menu-button:hover .hamburger__line:nth-child(3):not(.hamburger--active .hamburger__line) {
   transform: translateY(1px);
 }
 
 .menu-button:active .hamburger__line {
   transform: scale(0.9);
+}
+
+/* Burger-Menü aktiver Zustand */
+.hamburger--active .hamburger__line:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger--active .hamburger__line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger--active .hamburger__line:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.menu-button--active {
+  background-color: var(--color-gray-100);
 }
 </style>

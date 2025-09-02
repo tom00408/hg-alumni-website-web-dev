@@ -177,7 +177,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import HgCard from '../components/HgCard.vue'
-import type { MembershipApplication } from '../lib/types'
+// import type { MembershipApplication } from '../lib/types'
 
 const submitting = ref(false)
 const submitted = ref(false)

@@ -40,6 +40,7 @@
     <!-- Footer -->
     <div class="sidebar__footer">
       <p class="footer-text">© 2024 HG Alumni</p>
+      <p class="footer-text">v.0.2</p>
     </div>
   </aside>
 
@@ -48,26 +49,69 @@
     v-if="isOpen" 
     class="sidebar-overlay"
     @click="$emit('close')"
-  ></div>
+  >
+    <!-- Mobile Navigation im Overlay -->
+    <div class="mobile-nav-overlay" @click.stop>
+      <div class="mobile-nav-header">
+        <div class="mobile-logo">
+          <div class="logo-circle">
+            <span class="logo-text">HG</span>
+          </div>
+          <span class="mobile-title">Alumni Verein</span>
+        </div>
+        <button 
+          class="mobile-close-btn"
+          @click="$emit('close')"
+          aria-label="Menü schließen"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+      
+      <nav class="mobile-nav">
+        <ul class="mobile-nav-list">
+          <li 
+            v-for="item in navigationItems" 
+            :key="item.id"
+            class="mobile-nav-item"
+          >
+            <router-link 
+              :to="item.route"
+              class="mobile-nav-link"
+              :class="{ 'mobile-nav-link--active': $route.name === item.id }"
+              @click="$emit('close')"
+            >
+              <span class="mobile-nav-icon" v-html="item.icon"></span>
+              <span class="mobile-nav-label">{{ item.label }}</span>
+              <svg class="mobile-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+              </svg>
+            </router-link>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="mobile-nav-footer">
+        <p>© 2024 HG Alumni • v.0.2</p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-
 interface Props {
   isOpen?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   isOpen: false
 })
 
 defineEmits<{
   close: []
 }>()
-
-const route = useRoute()
 
 const navigationItems = [
   {
@@ -136,6 +180,8 @@ const navigationItems = [
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: var(--shadow-xl);
 }
 
 .sidebar--open {
@@ -188,16 +234,20 @@ const navigationItems = [
 .sidebar__nav {
   flex: 1;
   padding: var(--spacing-lg) 0;
+  min-height: 200px;
+  overflow-y: auto;
 }
 
 .nav-list {
   list-style: none;
   margin: 0;
   padding: 0;
+  width: 100%;
 }
 
 .nav-item {
   margin-bottom: var(--spacing-xs);
+  width: 100%;
 }
 
 .nav-link {
@@ -205,13 +255,16 @@ const navigationItems = [
   align-items: center;
   gap: var(--spacing-md);
   padding: var(--spacing-md) var(--spacing-lg);
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-weight: var(--font-weight-medium);
   transition: all var(--transition-fast);
   border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   margin-right: var(--spacing-lg);
   position: relative;
+  min-height: 48px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .nav-link:hover {
@@ -269,7 +322,168 @@ const navigationItems = [
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
   opacity: 0;
-  animation: fadeIn var(--transition-fast) forwards;
+  animation: fadeIn var(--transition-normal) forwards;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+}
+
+/* Mobile Navigation Overlay */
+.mobile-nav-overlay {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideInUp var(--transition-normal) ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.mobile-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.mobile-logo .logo-circle {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-logo .logo-text {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+}
+
+.mobile-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-secondary);
+}
+
+.mobile-close-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--color-gray-100);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-gray-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.mobile-close-btn:hover {
+  background: var(--color-gray-200);
+  color: var(--color-gray-800);
+}
+
+.mobile-nav {
+  flex: 1;
+  padding: var(--spacing-md) 0;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-nav-item {
+  margin-bottom: var(--spacing-xs);
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-lg);
+  margin: 0 var(--spacing-md);
+  position: relative;
+}
+
+.mobile-nav-link:hover {
+  background-color: var(--color-gray-50);
+  transform: translateX(4px);
+}
+
+.mobile-nav-link--active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.mobile-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.mobile-nav-label {
+  flex: 1;
+  font-size: var(--font-size-base);
+}
+
+.mobile-nav-arrow {
+  color: var(--color-gray-400);
+  transition: transform var(--transition-fast);
+}
+
+.mobile-nav-link:hover .mobile-nav-arrow {
+  transform: translateX(2px);
+}
+
+.mobile-nav-footer {
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--color-gray-200);
+  text-align: center;
+}
+
+.mobile-nav-footer p {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-600);
+  margin: 0;
+}
+
+/* Slide-in Animation */
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes fadeIn {
@@ -281,14 +495,74 @@ const navigationItems = [
 /* Desktop */
 @media (min-width: 1024px) {
   .sidebar {
-    position: relative;
+    position: fixed;
     transform: translateX(0);
     height: 100vh;
     z-index: 100;
   }
   
+  .sidebar--open {
+    transform: translateX(0);
+  }
+  
   .sidebar-overlay {
     display: none;
+  }
+}
+
+/* Tablet und Mobile */
+@media (max-width: 1023px) {
+  .sidebar {
+    z-index: 1001;
+    width: min(var(--sidebar-width), 80vw);
+  }
+  
+  .sidebar-overlay {
+    z-index: 1000;
+  }
+}
+
+/* Sehr kleine Bildschirme */
+@media (max-width: 480px) {
+  .sidebar {
+    width: min(var(--sidebar-width), 90vw);
+  }
+  
+  .sidebar__header {
+    padding: var(--spacing-lg);
+  }
+  
+  .logo-circle {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .sidebar__title h2 {
+    font-size: var(--font-size-base);
+  }
+  
+  .sidebar__title p {
+    font-size: var(--font-size-xs);
+  }
+  
+  /* Mobile Nav Overlay Anpassungen */
+  .mobile-nav-overlay {
+    max-width: 95vw;
+    max-height: 85vh;
+    margin: var(--spacing-sm);
+  }
+  
+  .mobile-nav-header {
+    padding: var(--spacing-md);
+  }
+  
+  .mobile-title {
+    font-size: var(--font-size-base);
+  }
+  
+  .mobile-nav-link {
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: 0 var(--spacing-sm);
   }
 }
 

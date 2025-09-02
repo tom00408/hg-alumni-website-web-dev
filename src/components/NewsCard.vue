@@ -71,7 +71,7 @@ interface Props {
   article: NewsArticle
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 defineEmits<{
   'read-more': [article: NewsArticle]

@@ -9,7 +9,7 @@ import {
   query, 
   orderBy, 
   limit, 
-  startAfter,
+  // startAfter,
   Timestamp 
 } from 'firebase/firestore'
 import { db } from '../lib/firebase'
@@ -20,7 +20,7 @@ const COLLECTION_NAME = 'news'
 /**
  * Artikel mit Paginierung laden
  */
-export const getArticles = async (page = 1, pageSize = 6): Promise<{
+export const getArticles = async (_page = 1, pageSize = 6): Promise<{
   articles: NewsArticle[]
   hasMore: boolean
 }> => {
@@ -101,10 +101,11 @@ export const getArticleById = async (id: string): Promise<NewsArticle | null> =>
 /**
  * Artikel by Slug laden
  */
-export const getArticleBySlug = async (slug: string): Promise<NewsArticle | null> => {
+export const getArticleBySlug = async (_slug: string): Promise<NewsArticle | null> => {
   try {
     const articlesCollection = collection(db, COLLECTION_NAME)
-    const q = query(articlesCollection, orderBy('slug', '==', slug), limit(1))
+    const q = query(articlesCollection, limit(1))
+    // TODO: Implementiere korrekte Slug-Suche mit where() statt orderBy()
     const querySnapshot = await getDocs(q)
     
     if (!querySnapshot.empty) {

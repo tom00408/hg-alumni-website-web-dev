@@ -115,7 +115,7 @@
         
         <!-- Navigation -->
         <button 
-          v-if="images.length > 1"
+          v-if="galleryStore.images.length > 1"
           class="lightbox-nav lightbox-prev"
           @click="previousImage"
           aria-label="Vorheriges Bild"
@@ -126,7 +126,7 @@
         </button>
         
         <button 
-          v-if="images.length > 1"
+          v-if="galleryStore.images.length > 1"
           class="lightbox-nav lightbox-next"
           @click="nextImage"
           aria-label="Nächstes Bild"
@@ -144,7 +144,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useGalleryStore } from '../stores/gallery'
 import HgCard from '../components/HgCard.vue'
-import type { GalleryImage } from '../lib/types'
+// import type { GalleryImage } from '../lib/types'
 
 const galleryStore = useGalleryStore()
 

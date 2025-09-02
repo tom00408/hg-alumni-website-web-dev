@@ -26,7 +26,7 @@ const STORAGE_PATH = 'gallery'
 /**
  * Bilder mit Paginierung laden
  */
-export const getImages = async (page = 1, pageSize = 12): Promise<{
+export const getImages = async (_page = 1, pageSize = 12): Promise<{
   images: GalleryImage[]
   hasMore: boolean
 }> => {

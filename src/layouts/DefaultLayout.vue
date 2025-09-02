@@ -1,7 +1,10 @@
 <template>
   <div class="layout">
     <!-- Mobile Header -->
-    <AppHeader @toggle-sidebar="toggleSidebar" />
+    <AppHeader 
+      :sidebar-open="sidebarOpen" 
+      @toggle-sidebar="toggleSidebar" 
+    />
     
     <!-- Sidebar -->
     <AppSidebar 
@@ -19,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import AppSidebar from '../components/AppSidebar.vue'
 
@@ -40,12 +43,35 @@ const handleResize = () => {
   }
 }
 
+// Keyboard Support - ESC zum Schließen
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && sidebarOpen.value) {
+    closeSidebar()
+  }
+}
+
+// Body Scroll verhindern wenn Sidebar offen ist
+const updateBodyScroll = () => {
+  if (sidebarOpen.value && window.innerWidth < 1024) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+}
+
+// Watch für sidebarOpen um Body Scroll zu kontrollieren
+watch(sidebarOpen, updateBodyScroll)
+
 onMounted(() => {
   window.addEventListener('resize', handleResize)
+  document.addEventListener('keydown', handleKeydown)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
+  document.removeEventListener('keydown', handleKeydown)
+  // Sicherstellen, dass Body Scroll zurückgesetzt wird
+  document.body.style.overflow = ''
 })
 </script>
 

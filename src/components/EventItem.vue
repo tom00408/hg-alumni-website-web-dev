@@ -43,7 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { Timestamp } from 'firebase/firestore'
 import HgCard from './HgCard.vue'
 import type { Event } from '../lib/types'
@@ -52,7 +51,7 @@ interface Props {
   event: Event
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 defineEmits<{
   'view-details': [event: Event]
