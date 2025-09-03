@@ -40,7 +40,7 @@
     <!-- Footer -->
     <div class="sidebar__footer">
       <p class="footer-text">© 2024 HG Alumni</p>
-      <p class="footer-text">v.0.2</p>
+      <p class="footer-text">{{ version }}</p>
     </div>
   </aside>
 
@@ -94,7 +94,7 @@
       </nav>
       
       <div class="mobile-nav-footer">
-        <p>© 2024 HG Alumni • v.0.2</p>
+        <p>© 2024 HG Alumni • {{ version}}</p>
       </div>
     </div>
   </div>
@@ -112,6 +112,9 @@ withDefaults(defineProps<Props>(), {
 defineEmits<{
   close: []
 }>()
+
+const version = import.meta.env.VITE_VERSION
+
 
 const navigationItems = [
   {
