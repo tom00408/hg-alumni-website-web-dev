@@ -74,10 +74,13 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useNewsStore } from '../stores/news'
 import HgCard from '../components/HgCard.vue'
 import NewsCard from '../components/NewsCard.vue'
 import type { NewsArticle } from '../lib/types'
+
+const router = useRouter()
 
 const newsStore = useNewsStore()
 
@@ -86,11 +89,7 @@ const loadMore = async () => {
 }
 
 const readNewsArticle = (article: NewsArticle) => {
-  // TODO: Implementiere News-Detail-Ansicht oder Modal
-  console.log('Read article:', article)
-  
-  // Beispiel: Navigation zu Artikel-Detail-Seite
-  // router.push(`/news/${article.slug}`)
+  router.push(`/news/${article.slug}`)
 }
 
 const shareArticle = (article: NewsArticle) => {

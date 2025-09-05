@@ -19,7 +19,7 @@ const config = {
   password: process.env.PREVIEW_SFTP_KEY, 
 };
 
-const localDir = path.join(__dirname, 'dist');
+const localDir = path.join(__dirname, '../dist');
 const remoteDir = './website/'; 
 
 async function uploadDir(local : string, remote : string) {

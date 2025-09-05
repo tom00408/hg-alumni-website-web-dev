@@ -20,11 +20,27 @@ const router = createRouter({
       }
     },
     {
+      path: '/termine/:id',
+      name: 'event-detail',
+      component: () => import('../pages/EventDetail.vue'),
+      meta: {
+        title: 'Event Details'
+      }
+    },
+    {
       path: '/news',
       name: 'news',
       component: () => import('../pages/News.vue'),
       meta: {
         title: 'Neues im Verein'
+      }
+    },
+    {
+      path: '/news/:slug',
+      name: 'news-detail',
+      component: () => import('../pages/NewsDetail.vue'),
+      meta: {
+        title: 'Artikel'
       }
     },
     {

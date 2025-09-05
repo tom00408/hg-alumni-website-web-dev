@@ -24,6 +24,7 @@
             </button>
           </div>
           <div class="view-toggle">
+            <div class="view-toggle-background" :class="{ 'view-toggle-background--list': viewMode === 'list' }"></div>
             <button 
               class="view-button"
               :class="{ 'view-button--active': viewMode === 'grid' }"
@@ -33,6 +34,7 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"/>
               </svg>
+              <span class="view-button-label">Kacheln</span>
             </button>
             <button 
               class="view-button"
@@ -43,6 +45,7 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
               </svg>
+              <span class="view-button-label">Liste</span>
             </button>
           </div>
         </div>
@@ -110,14 +113,20 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useEventsStore } from '../stores/events'
 import HgCard from '../components/HgCard.vue'
 import EventItem from '../components/EventItem.vue'
 import type { Event } from '../lib/types'
 
+const router = useRouter()
+
 const eventsStore = useEventsStore()
 const activeFilter = ref<'all' | 'upcoming' | 'past'>('upcoming')
-const viewMode = ref<'grid' | 'list'>('grid')
+
+// Automatisch Liste-Ansicht auf mobilen Geräten
+const isMobile = window.innerWidth <= 768
+const viewMode = ref<'grid' | 'list'>(isMobile ? 'list' : 'grid')
 
 const filterOptions = [
   { value: 'upcoming' as const, label: 'Kommende Termine' },
@@ -141,8 +150,7 @@ const setFilter = (filter: 'all' | 'upcoming' | 'past') => {
 }
 
 const viewEventDetails = (event: Event) => {
-  // TODO: Implementiere Event-Details Modal oder Navigation
-  console.log('View event details:', event)
+  router.push(`/termine/${event.id}`)
 }
 
 onMounted(async () => {
@@ -214,36 +222,84 @@ onMounted(async () => {
   color: var(--color-white);
 }
 
+/* View Toggle Styles */
 .view-toggle {
+  position: relative;
   display: flex;
-  gap: var(--spacing-xs);
-  border: 1px solid var(--color-gray-200);
-  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid var(--color-gray-200);
+  border-radius: var(--radius-xl);
   padding: var(--spacing-xs);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.view-toggle-background {
+  position: absolute;
+  top: var(--spacing-xs);
+  left: var(--spacing-xs);
+  width: calc(50% - var(--spacing-xs));
+  height: calc(100% - calc(var(--spacing-xs) * 2));
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  border-radius: var(--radius-lg);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(83, 98, 254, 0.3);
+  z-index: 1;
+}
+
+.view-toggle-background--list {
+  transform: translateX(100%);
 }
 
 .view-button {
-  width: 40px;
-  height: 40px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--spacing-sm);
+  min-width: 80px;
+  height: 44px;
+  padding: var(--spacing-sm) var(--spacing-md);
   border: none;
-  background: none;
-  color: var(--color-gray-500);
-  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-gray-600);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  z-index: 2;
 }
 
-.view-button:hover {
-  background-color: var(--color-gray-100);
-  color: var(--color-gray-700);
+.view-button:hover:not(.view-button--active) {
+  color: var(--color-primary);
+  transform: translateY(-1px);
 }
 
 .view-button--active {
-  background-color: var(--color-primary);
   color: var(--color-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.view-button-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.view-button svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.view-button:hover svg {
+  transform: scale(1.1);
+}
+
+.view-button--active svg {
+  transform: scale(1.05);
 }
 
 .loading-state,
@@ -319,7 +375,7 @@ onMounted(async () => {
   }
   
   .view-toggle {
-    align-self: center;
+    display: none;
   }
   
   .events-grid--grid {

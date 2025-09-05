@@ -8,9 +8,9 @@
           <section class="impressum-section">
             <h2>Verantwortlich für den Inhalt</h2>
             <div class="contact-info">
-              <p><strong>Alumni-Verein des Hainberg-Gymnasiums e.V.</strong></p>
-              <p>Musterstraße 123<br>
-                 37081 Göttingen<br>
+              <p><strong>Alumniverein des Hainberg-Gymnasiums Göttingen e.V.</strong></p>
+              <p>Friedländer Weg 19<br>
+                 37085 Göttingen<br>
                  Deutschland
               </p>
             </div>
@@ -19,9 +19,9 @@
           <section class="impressum-section">
             <h2>Kontakt</h2>
             <div class="contact-info">
-              <p><strong>E-Mail:</strong> <a href="mailto:info@hg-alumni.de">info@hg-alumni.de</a></p>
-              <p><strong>Telefon:</strong> <a href="tel:+4955112345678">+49 (0) 551 123 456 78</a></p>
-              <p><strong>Website:</strong> <a href="https://hg-alumni.de">www.hg-alumni.de</a></p>
+              <p><strong>E-Mail:</strong> <a href="mailto:info@alumni-hg-goettingen.de">info@alumni-hg-goettingen.de</a></p>
+              <p><strong>Telefon:</strong> <a href="tel:+495514002913">+49 (0) 551 4002913</a></p>
+              <p><strong>Website:</strong> <a href="https://alumni-hg-goettingen.de">https://alumni-hg-goettingen.de</a></p>
             </div>
           </section>
 
@@ -29,18 +29,17 @@
             <h2>Vereinsregister</h2>
             <div class="contact-info">
               <p><strong>Registergericht:</strong> Amtsgericht Göttingen</p>
-              <p><strong>Registernummer:</strong> VR 12345</p>
-              <p><strong>Vereinsnummer:</strong> 123456789</p>
+              <p><strong>Registernummer:</strong> VR 201655</p>
             </div>
           </section>
 
           <section class="impressum-section">
             <h2>Vorstand</h2>
             <div class="contact-info">
-              <p><strong>1. Vorsitzende:</strong> Dr. Maria Mustermann</p>
-              <p><strong>2. Vorsitzender:</strong> Prof. Dr. Max Musterland</p>
-              <p><strong>Schatzmeister:</strong> Diplom-Ing. Anna Beispiel</p>
-              <p><strong>Schriftführerin:</strong> M.A. Lisa Demo</p>
+              <p><strong>1. Vorsitzende:</strong> Steffen Tiedtke</p>
+              <p><strong>2. Vorsitzender:</strong> Georg Bartelt</p>
+              <p><strong>Schatzmeister:</strong> NOCH AUSFÜLLEN</p>
+              <p><strong>Schriftführerin:</strong> NOCH AUSFÜLLEN</p>
             </div>
           </section>
 
@@ -109,8 +108,6 @@
             <h2>Technische Umsetzung</h2>
             <div class="contact-info">
               <p><strong>Webentwicklung:</strong> HG Alumni IT-Team</p>
-              <p><strong>Hosting:</strong> [Hosting-Provider Name]</p>
-              <p><strong>Framework:</strong> Vue.js mit TypeScript</p>
               <p><strong>Letzte Aktualisierung:</strong> {{ lastUpdated }}</p>
             </div>
           </section>
@@ -121,16 +118,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import HgCard from '../components/HgCard.vue'
 
-const lastUpdated = computed(() => {
-  return new Date().toLocaleDateString('de-DE', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-})
+const lastUpdated = import.meta.env.VITE_LAST_UPDATED
 </script>
 
 <style scoped>

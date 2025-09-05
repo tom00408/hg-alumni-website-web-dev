@@ -1,5 +1,5 @@
 /* Import des Haupt-Themes */
-@import './styles/theme.css';
+@import './theme.css';
 
 #app {
   width: 100%;

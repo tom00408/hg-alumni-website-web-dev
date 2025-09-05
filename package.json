@@ -8,7 +8,8 @@
     "build": "vue-tsc -b && vite build",
     "postbuild": "cp .htaccess dist/.htaccess",
     "preview": "vite preview",
-    "deployPreview": "tsx deployPreview.ts"
+    "deploy:preview": "tsx scripts/deployPreview.ts",
+    "deploy:main": "echo 'du bist noch nicht so weit'"
   },
   "dependencies": {
     "firebase": "^10.7.1",

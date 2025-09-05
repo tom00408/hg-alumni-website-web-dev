@@ -13,7 +13,7 @@
           <p class="hero__subtitle">
             Willkommen in unserer Gemeinschaft ehemaliger Schülerinnen und Schüler. 
             Bleiben Sie mit Ihrer Schule und Ihren Mitschülern in Verbindung.
-          </p>
+          </p> 
           <div class="hero__actions">
             <router-link to="/mitglied-werden" class="btn-primary btn-large">
               Mitglied werden
@@ -26,25 +26,46 @@
       </HgCard>
     </section>
 
-    <!-- Quick Navigation -->
-    <section class="quick-nav">
-      <h2 class="section-title">Entdecken Sie</h2>
-      <div class="quick-nav__grid">
-        <router-link 
-          v-for="item in quickNavItems" 
-          :key="item.id"
-          :to="item.route"
-          class="quick-nav__item"
-        >
-          <HgCard hover class="quick-nav__card">
-            <div class="quick-nav__icon" v-html="item.icon"></div>
-            <h3 class="quick-nav__title">{{ item.title }}</h3>
-            <p class="quick-nav__description">{{ item.description }}</p>
-          </HgCard>
-        </router-link>
-      </div>
+
+
+    <!-- Über den Alumni-Verein -->
+    <section class="about-section">
+      <HgCard class="about-card">
+        <div class="about-content">
+          <p class="about-subtitle">Ehemalige Schüler:innen engagieren sich für „ihre" Schule</p>
+          
+          <div class="about-text">
+            <p>
+              „Bildung, Kunst und Kultur zum Wohle des Hainberg-Gymnasiums" zu fördern benennt der 2014 gegründete „Alumni-Verein" des HG als ein Hauptziel seiner Arbeit. Zudem unterstützt der Verein die Mitglieder der Schule bei der beruflichen Orientierung der Schüler:innen der Oberstufe.
+            </p>
+            
+            <p>
+              Daneben will der Verein auch immer wieder Formate der Begegnung bereitstellen, in denen Ehemalige sich in freundlicher Atmosphäre treffen, nett beisammen sein und austauschen können – z.B. dass ehemalige Schüler:innen sich anlässlich ihres vor 10 oder 25 Jahren bestandenen Abiturs gemeinsam an „damals" erinnern möchten oder mit einem Besuch in ihrer ehemaligen Schule und einer Schulführung.
+            </p>
+            
+            <p>
+              Der Alumni-Verein möchte auch die ehemaligen Lehrer:innen ermutigen, die jährlich stattfindende große „Alumni-Party" im Spätsommer als Chance der Begegnung mit ihren ehemaligen Tutand:innen bzw. Schüler:innen, z.B. in den Prüfungskursen, zu nutzen. Beim Alumni-Konzert zeigen auch aktive Schüler:innen ihr Können auf der Bühne.
+            </p>
+            
+            <div class="about-highlight">
+              <p class="highlight-text">
+                <strong>Die Mitgliedschaft im Verein ist für Schüler:innen in den ersten drei Jahren kostenfrei.</strong>
+              </p>
+              <p class="contact-info">
+                Weitere Informationen bei: 
+                <a href="mailto:g.bartelt@hg-gym.de" class="contact-link">g.bartelt@hg-gym.de</a>
+              </p>
+            </div>
+            
+            <p class="board-info">
+              <em>Der Vorstand im Alumni-Verein</em>
+            </p>
+          </div>
+        </div>
+      </HgCard>
     </section>
 
+    
     <!-- Kommende Termine -->
     <section v-if="upcomingEvents.length" class="upcoming-events">
       <h2 class="section-title">Kommende Termine</h2>
@@ -81,7 +102,6 @@
         </router-link>
       </div>
     </section>
-
     <!-- CTA Section -->
     <section class="cta-section">
       <HgCard variant="accent" class="cta-card">
@@ -102,12 +122,15 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useEventsStore } from '../stores/events'
 import { useNewsStore } from '../stores/news'
 import HgCard from '../components/HgCard.vue'
 import EventItem from '../components/EventItem.vue'
 import NewsCard from '../components/NewsCard.vue'
 import type { Event, NewsArticle } from '../lib/types'
+
+const router = useRouter()
 
 // Stores verwenden
 const eventsStore = useEventsStore()
@@ -117,53 +140,13 @@ const newsStore = useNewsStore()
 const upcomingEvents = eventsStore.nextUpcomingEvents
 const latestNews = newsStore.latestArticles
 
-const quickNavItems = [
-  {
-    id: 'termine',
-    title: 'Termine',
-    description: 'Kommende Veranstaltungen und wichtige Termine',
-    route: '/termine',
-    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
-    </svg>`
-  },
-  {
-    id: 'news',
-    title: 'Neues im Verein',
-    description: 'Aktuelle Nachrichten und Berichte',
-    route: '/news',
-    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-    </svg>`
-  },
-  {
-    id: 'galerie',
-    title: 'Galerie',
-    description: 'Bilder von Veranstaltungen und Erinnerungen',
-    route: '/galerie',
-    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-    </svg>`
-  },
-  {
-    id: 'mitglied-werden',
-    title: 'Mitglied werden',
-    description: 'Treten Sie unserem Alumni-Netzwerk bei',
-    route: '/mitglied-werden',
-    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-    </svg>`
-  }
-]
 
 const viewEventDetails = (event: Event) => {
-  // TODO: Implementiere Event-Details Modal oder Navigation
-  console.log('View event details:', event)
+  router.push(`/termine/${event.id}`)
 }
 
 const readNewsArticle = (article: NewsArticle) => {
-  // TODO: Implementiere News-Detail-Ansicht
-  console.log('Read article:', article)
+  router.push(`/news/${article.slug}`)
 }
 
 const shareArticle = (article: NewsArticle) => {
@@ -259,6 +242,14 @@ onMounted(async () => {
 .btn-large {
   padding: var(--spacing-lg) var(--spacing-2xl);
   font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  min-height: 56px;
+  border-radius: var(--radius-xl);
+}
+
+.btn-large:hover,
+.btn-large:focus {
+  transform: translateY(-3px) scale(1.03);
 }
 
 .section-title {
@@ -269,46 +260,6 @@ onMounted(async () => {
   margin-bottom: var(--spacing-2xl);
 }
 
-.quick-nav {
-  margin-bottom: var(--spacing-2xl);
-}
-
-.quick-nav__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-xl);
-}
-
-.quick-nav__item {
-  text-decoration: none;
-  color: inherit;
-}
-
-.quick-nav__card {
-  text-align: center;
-  height: 100%;
-  padding: var(--spacing-2xl);
-}
-
-.quick-nav__icon {
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-lg);
-  display: flex;
-  justify-content: center;
-}
-
-.quick-nav__title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-secondary);
-  margin-bottom: var(--spacing-md);
-}
-
-.quick-nav__description {
-  color: var(--color-gray-600);
-  line-height: var(--line-height-relaxed);
-  margin: 0;
-}
 
 .upcoming-events,
 .latest-news {
@@ -331,6 +282,88 @@ onMounted(async () => {
 
 .section-footer {
   text-align: center;
+}
+
+/* Über den Alumni-Verein Section */
+.about-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.about-card {
+  background: linear-gradient(135deg, var(--color-white) 0%, rgba(72, 109, 185, 0.03) 100%);
+}
+
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary);
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-tight);
+}
+
+.about-subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  font-weight: var(--font-weight-medium);
+  font-style: italic;
+}
+
+.about-text {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text);
+}
+
+.about-text p {
+  margin-bottom: var(--spacing-lg);
+  text-align: justify;
+}
+
+.about-highlight {
+  background: linear-gradient(135deg, rgba(83, 98, 254, 0.1) 0%, rgba(72, 109, 185, 0.1) 100%);
+  border-left: 4px solid var(--color-primary);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+.highlight-text {
+  color: var(--color-secondary);
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-md) !important;
+}
+
+.contact-info {
+  margin-bottom: 0 !important;
+  color: var(--color-gray-700);
+}
+
+.contact-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-normal);
+}
+
+.contact-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.board-info {
+  text-align: center;
+  color: var(--color-gray-600);
+  font-size: var(--font-size-base);
+  margin-bottom: 0 !important;
+  margin-top: var(--spacing-lg) !important;
 }
 
 .cta-section {
@@ -372,15 +405,32 @@ onMounted(async () => {
     align-items: center;
   }
   
-  .quick-nav__grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
-  }
   
   .events-grid,
   .news-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
+  }
+  
+  .about-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .about-subtitle {
+    font-size: var(--font-size-lg);
+  }
+  
+  .about-text {
+    font-size: var(--font-size-base);
+  }
+  
+  .about-text p {
+    text-align: left;
+  }
+  
+  .about-highlight {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
   }
   
   .cta-title {

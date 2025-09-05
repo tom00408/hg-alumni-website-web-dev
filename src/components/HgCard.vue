@@ -34,7 +34,7 @@
 interface Props {
   hover?: boolean
   compact?: boolean
-  variant?: 'default' | 'primary' | 'secondary' | 'accent'
+  variant?: 'default' | 'primary' | 'secondary' | 'accent' | 'error'
 }
 
 withDefaults(defineProps<Props>(), {
@@ -116,6 +116,31 @@ withDefaults(defineProps<Props>(), {
 
 .hg-card--compact .hg-card__header + .hg-card__content {
   padding-top: var(--spacing-md);
+}
+
+/* Variant Styles */
+.hg-card--primary {
+  border: 2px solid var(--color-primary);
+  background: linear-gradient(135deg, var(--color-white) 0%, rgba(83, 98, 254, 0.05) 100%);
+}
+
+.hg-card--secondary {
+  border: 2px solid var(--color-secondary);
+  background: linear-gradient(135deg, var(--color-white) 0%, rgba(72, 109, 185, 0.05) 100%);
+}
+
+.hg-card--accent {
+  border: 2px solid var(--color-accent);
+  background: linear-gradient(135deg, var(--color-white) 0%, rgba(114, 48, 147, 0.05) 100%);
+}
+
+.hg-card--error {
+  border: 2px solid #ef4444;
+  background: linear-gradient(135deg, var(--color-white) 0%, rgba(239, 68, 68, 0.05) 100%);
+}
+
+.hg-card--error .hg-card__content {
+  color: #dc2626;
 }
 
 /* Focus-Styles für Links/Buttons in Cards */
