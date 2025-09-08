@@ -57,13 +57,7 @@ npm run dev
 
 ### 🔧 **Konfiguration**
 
-#### **Für Development (mit Mock-Daten):**
-```bash
-# .env Datei erstellen
-echo "VITE_USE_MOCK_DATA=true" > .env
-```
-
-#### **Für Production (mit Firebase):**
+#### **Setup:**
 ```bash
 # env.template zu .env kopieren
 cp env.template .env
@@ -128,7 +122,6 @@ AlumniWebsite/
 │   ├── 📂 lib/                 # 🛠️ Utilities & Konfiguration
 │   │   ├── firebase.ts         # Firebase SDK Setup
 │   │   ├── types.ts            # TypeScript Interface-Definitionen
-│   │   └── mockData.ts         # Entwicklungs-Mock-Daten
 │   ├── 📂 styles/              # 🎨 Design-System
 │   │   └── theme.css           # CSS Custom Properties & Utilities
 │   ├── 📂 router/              # 🛣️ Vue Router Konfiguration
@@ -264,14 +257,6 @@ service firebase.storage {
 
 ## 🛠️ Development Guide
 
-### 🧪 **Mock-Daten für lokale Entwicklung**
-```bash
-# .env konfigurieren für Development ohne Firebase
-echo "VITE_USE_MOCK_DATA=true" > .env
-
-# Enthält 5 Demo-Events, 4 News-Artikel, 8 Galerie-Bilder
-npm run dev
-```
 
 ### 🧩 **Neue Komponenten erstellen**
 ```bash
@@ -365,7 +350,6 @@ CMD ["npm", "run", "preview", "--", "--host"]
 - [x] **Responsive Design** (Desktop/Tablet/Mobile)
 - [x] **Pinia State Management** mit TypeScript
 - [x] **Firebase Integration** (Firestore + Storage)
-- [x] **Mock-Daten System** für Development
 - [x] **Vue Router** mit deutschen URLs
 - [x] **Accessibility** (WCAG 2.1 AA)
 - [x] **Form Validation** im Mitgliedsformular

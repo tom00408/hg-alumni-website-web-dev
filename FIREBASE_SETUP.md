@@ -52,8 +52,6 @@ Diese Anleitung führt dich durch die komplette Einrichtung der Firebase-Integra
    VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
    VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
 
-   # Development Settings
-   VITE_USE_MOCK_DATA=false
    ```
 
 ## 🧪 Integration testen
@@ -63,10 +61,6 @@ Diese Anleitung führt dich durch die komplette Einrichtung der Firebase-Integra
 npm run firebase:test
 ```
 
-### Mock-Daten migrieren
-```bash
-npm run firebase:migrate
-```
 
 ## 📊 Datenstruktur
 
@@ -178,18 +172,9 @@ service firebase.storage {
 
 ## 🛠️ Entwicklung
 
-### Mock-Daten vs. Echte Daten
+### Firebase-Daten
 
-Die App unterstützt beide Modi:
-
-- **Mock-Modus**: `VITE_USE_MOCK_DATA=true`
-  - Verwendet lokale Test-Daten
-  - Keine Firebase-Verbindung erforderlich
-  - Ideal für Entwicklung ohne Internet
-
-- **Firebase-Modus**: `VITE_USE_MOCK_DATA=false`
-  - Verwendet echte Firebase-Daten
-  - Erfordert konfigurierte Firebase-Verbindung
+Die Anwendung arbeitet ausschließlich mit echten Firebase-Daten und erfordert eine konfigurierte Firebase-Verbindung.
 
 ### Services
 
@@ -214,11 +199,9 @@ Pinia-Stores in `src/stores/` handhaben Zustand und Caching:
 
 Stelle die oben genannten Firestore- und Storage-Regeln ein.
 
-### 2. Umgebung auf Produktion umstellen
+### 2. Produktionsumgebung
 
-```env
-VITE_USE_MOCK_DATA=false
-```
+Die Anwendung arbeitet standardmäßig mit Firebase-Daten.
 
 ### 3. Backup-Strategie
 

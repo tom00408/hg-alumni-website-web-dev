@@ -10,7 +10,7 @@
           <span class="logo-text">HG</span>
         </div>
         <div class="sidebar__title">
-          <h2>Alumni Verein</h2>
+          <h2>Alumni-Verein</h2>
           <p>Hainberg-Gymnasium</p>
         </div>
       </div>
@@ -57,7 +57,7 @@
           <div class="logo-circle">
             <span class="logo-text">HG</span>
           </div>
-          <span class="mobile-title">Alumni Verein</span>
+          <span class="mobile-title">Alumni-Verein</span>
         </div>
         <button 
           class="mobile-close-btn"

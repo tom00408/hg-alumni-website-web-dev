@@ -29,7 +29,7 @@ export const useEventsStore = defineStore('events', () => {
   })
 
   const nextUpcomingEvents = computed(() => {
-    return upcomingEvents.value.slice(0, 3)
+    return upcomingEvents.value.slice(0, 2)
   })
 
   // Actions

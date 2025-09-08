@@ -273,12 +273,7 @@ const submitApplication = async () => {
     
     console.log('Submitting application:', application)
     
-    if (import.meta.env.VITE_USE_MOCK_DATA === 'true') {
-      // Simuliere API-Call für Mock-Daten
-      await new Promise(resolve => setTimeout(resolve, 2000))
-    } else {
-      await createMembershipApplication(application)
-    }
+    await createMembershipApplication(application)
     
     submitted.value = true
     

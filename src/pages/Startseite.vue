@@ -2,6 +2,14 @@
   <div class="startseite">
     <!-- Hero Section -->
     <section class="hero">
+      <div class="hero__background">
+        <img 
+          src="/images/innenhof.jpg" 
+          alt="Hainberg-Gymnasium Gebäude" 
+          class="hero__background-image"
+        />
+        <div class="hero__overlay"></div>
+      </div>
       <HgCard variant="primary" class="hero__card">
         <div class="hero__content">
           <div class="hero__logo">
@@ -11,11 +19,11 @@
           </div>
           <h1 class="hero__title">Alumni-Verein des Hainberg-Gymnasiums</h1>
           <p class="hero__subtitle">
-            Willkommen in unserer Gemeinschaft ehemaliger Schülerinnen und Schüler. 
-            Bleiben Sie mit Ihrer Schule und Ihren Mitschülern in Verbindung.
+            Willkommen in unserer Gemeinschaft ehemaliger Schüler:innen und Lehrer:innen. 
+            Bleiben Sie mit Ihrer Schule, Ihren Mitschüler:innen und Kolleg:innen in Verbindung.
           </p> 
           <div class="hero__actions">
-            <router-link to="/mitglied-werden" class="btn-primary btn-large">
+            <router-link to="/mitglied-werden" class="btn-secondary btn-large">
               Mitglied werden
             </router-link>
             <router-link to="/news" class="btn-secondary">
@@ -58,7 +66,7 @@
             </div>
             
             <p class="board-info">
-              <em>Der Vorstand im Alumni-Verein</em>
+              <em>Der Vorstand vom Alumni-Verein</em>
             </p>
           </div>
         </div>
@@ -67,7 +75,14 @@
 
     
     <!-- Kommende Termine -->
-    <section v-if="upcomingEvents.length" class="upcoming-events">
+    <section v-if="eventsStore.loading" class="upcoming-events">
+      <h2 class="section-title">Kommende Termine</h2>
+      <div class="loading-state">
+        <p>Termine werden geladen...</p>
+      </div>
+    </section>
+    
+    <section v-else-if="upcomingEvents.length" class="upcoming-events">
       <h2 class="section-title">Kommende Termine</h2>
       <div class="events-grid">
         <EventItem 
@@ -85,7 +100,14 @@
     </section>
 
     <!-- Neueste News -->
-    <section v-if="latestNews.length" class="latest-news">
+    <section v-if="newsStore.loading" class="latest-news">
+      <h2 class="section-title">Neues im Verein</h2>
+      <div class="loading-state">
+        <p>Neuigkeiten werden geladen...</p>
+      </div>
+    </section>
+    
+    <section v-else class="latest-news">
       <h2 class="section-title">Neues im Verein</h2>
       <div class="news-grid">
         <NewsCard 
@@ -166,6 +188,7 @@ const shareArticle = (article: NewsArticle) => {
 onMounted(async () => {
   // Lade Daten von den Stores
   try {
+    // Immer die neuesten Daten laden für die Startseite
     await Promise.all([
       eventsStore.fetchEvents(),
       newsStore.fetchArticles()
@@ -182,13 +205,59 @@ onMounted(async () => {
   margin: 0 auto;
 }
 
+
+
 .hero {
   margin-bottom: var(--spacing-2xl);
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+}
+
+.hero__background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: var(--radius-xl);
+}
+
+.hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg, 
+    rgba(83, 98, 254, 0.8) 0%, 
+    rgba(72, 109, 185, 0.7) 50%,
+    rgba(83, 98, 254, 0.8) 100%
+  );
+  z-index: 2;
 }
 
 .hero__card {
   text-align: center;
-  background: linear-gradient(135deg, var(--color-white) 0%, rgba(83, 98, 254, 0.05) 100%);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 20px 40px rgba(83, 98, 254, 0.1);
 }
 
 .hero__content {
@@ -227,7 +296,7 @@ onMounted(async () => {
 
 .hero__subtitle {
   font-size: var(--font-size-lg);
-  color: var(--color-gray-600);
+  color: var(--color-gray-800);
   line-height: var(--line-height-relaxed);
   margin-bottom: var(--spacing-2xl);
 }
@@ -282,6 +351,13 @@ onMounted(async () => {
 
 .section-footer {
   text-align: center;
+}
+
+.loading-state {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--color-gray-600);
+  font-style: italic;
 }
 
 /* Über den Alumni-Verein Section */
@@ -396,6 +472,10 @@ onMounted(async () => {
 
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
+  .hero {
+    min-height: 500px;
+  }
+  
   .hero__title {
     font-size: var(--font-size-3xl);
   }
@@ -439,6 +519,10 @@ onMounted(async () => {
 }
 
 @media (max-width: 480px) {
+  .hero {
+    min-height: 400px;
+  }
+  
   .hero__logo .logo-circle {
     width: 60px;
     height: 60px;

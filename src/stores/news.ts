@@ -16,7 +16,7 @@ export const useNewsStore = defineStore('news', () => {
   const latestArticles = computed(() => {
     return articles.value
       .sort((a, b) => b.date.toMillis() - a.date.toMillis())
-      .slice(0, 3)
+      .slice(0, 2)
   })
 
   const articlesByTag = computed(() => {
