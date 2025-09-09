@@ -101,7 +101,20 @@ npm run firebase:test
   title?: string
   imageUrl: string
   thumbnailUrl?: string
+  folderId?: string | null
   createdAt: Timestamp
+}
+```
+
+#### `gallery_folders`
+```typescript
+{
+  id: string (auto-generated)
+  name: string
+  description?: string
+  coverImageId?: string
+  createdAt: Timestamp
+  updatedAt: Timestamp
 }
 ```
 
@@ -145,6 +158,11 @@ service cloud.firestore {
       allow write: if false; // Nur über Admin-Interface
     }
     
+    match /gallery_folders/{document} {
+      allow read: if true;
+      allow write: if false; // Nur über Admin-Interface
+    }
+    
     // Membership Applications - Nur schreibbar
     match /membershipApplications/{document} {
       allow read: if false; // Nur für Admins
@@ -163,6 +181,11 @@ service firebase.storage {
   match /b/{bucket}/o {
     // Gallery Images - Öffentlich lesbar
     match /gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if false; // Nur über Admin-Interface
+    }
+    
+    match /gallery_folders/{allPaths=**} {
       allow read: if true;
       allow write: if false; // Nur über Admin-Interface
     }

@@ -107,7 +107,7 @@
       </div>
     </section>
     
-    <section v-else class="latest-news">
+    <section v-else="latestNews.length" class="latest-news">
       <h2 class="section-title">Neues im Verein</h2>
       <div class="news-grid">
         <NewsCard 

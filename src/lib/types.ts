@@ -30,7 +30,17 @@ export interface GalleryImage {
   title?: string
   imageUrl: string
   thumbnailUrl?: string
+  folderId?: string | null  // null = unorganisierte Bilder
   createdAt?: Timestamp
+}
+
+export interface GalleryFolder {
+  id?: string
+  name: string
+  description?: string
+  coverImageId?: string  // ID des Cover-Bildes
+  createdAt?: Timestamp
+  updatedAt?: Timestamp
 }
 
 // Membership Application Types
