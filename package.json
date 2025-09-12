@@ -9,10 +9,13 @@
     "postbuild": "cp .htaccess dist/.htaccess",
     "preview": "vite preview",
     "deploy:preview": "tsx scripts/deployPreview.ts",
-    "deploy:main": "echo 'du bist noch nicht so weit'"
+    "deploy:main": "echo 'du bist noch nicht so weit'",
+    "check:types": "vue-tsc -b",
+    "check:file-sizes": "tsx scripts/check-file-sizes.ts",
+    "check:css": "tsx scripts/check-css.ts"
   },
   "dependencies": {
-    "firebase": "^10.7.1",
+    "firebase": "^12.2.1",
     "pinia": "^2.1.7",
     "vue": "^3.5.18",
     "vue-router": "^4.2.5"
@@ -20,8 +23,15 @@
   "devDependencies": {
     "@types/node": "^24.3.0",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/compiler-dom": "^3.5.21",
+    "@vue/compiler-sfc": "^3.5.21",
     "@vue/tsconfig": "^0.7.0",
     "dotenv": "^17.2.1",
+    "fast-glob": "^3.3.3",
+    "postcss": "^8.5.6",
+    "postcss-safe-parser": "^7.0.1",
+    "postcss-scss": "^4.0.9",
+    "postcss-selector-parser": "^7.1.0",
     "ssh2-sftp-client": "^12.0.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.5",

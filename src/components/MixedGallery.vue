@@ -14,24 +14,22 @@
       </button>
     </div>
 
-    <!-- Mixed Gallery Grid -->
-    <div v-else-if="items.length" class="gallery-container">
-      <div class="gallery-grid">
-        <!-- Folder Items -->
-        <div 
-          v-for="item in items" 
-          :key="item.id"
-          class="gallery-item"
-          :class="{ 'folder-item': item.type === 'folder' }"
-          @click="handleItemClick(item)"
-        >
-          <!-- Folder Card -->
-          <div v-if="item.type === 'folder'" class="folder-card">
+    <!-- Gallery Content -->
+    <div v-else-if="folders.length > 0 || images.length > 0" class="gallery-container">
+      <!-- Folders Section -->
+      <div v-if="folders.length > 0" class="folders-section">
+        <div class="folders-grid">
+          <div 
+            v-for="folder in folders" 
+            :key="folder.id"
+            class="folder-item"
+            @click="handleFolderClick(folder)"
+          >
             <div class="folder-cover">
               <img 
-                v-if="item.coverImage" 
-                :src="item.coverImage.thumbnailUrl || item.coverImage.imageUrl" 
-                :alt="(item.data as GalleryFolder).name"
+                v-if="folder.coverImage" 
+                :src="folder.coverImage.thumbnailUrl || folder.coverImage.imageUrl" 
+                :alt="folder.name"
                 class="cover-image"
                 loading="lazy"
               />
@@ -50,25 +48,34 @@
             </div>
             
             <div class="folder-info">
-              <h3 class="folder-name">{{ (item.data as GalleryFolder).name }}</h3>
-              <p v-if="(item.data as GalleryFolder).description" class="folder-description">
-                {{ (item.data as GalleryFolder).description }}
+              <h3 class="folder-name">{{ folder.name }}</h3>
+              <p v-if="folder.description" class="folder-description">
+                {{ folder.description }}
               </p>
               <div class="folder-meta">
                 <span class="image-count">
-                  {{ item.imageCount || 0 }} {{ item.imageCount === 1 ? 'Bild' : 'Bilder' }}
+                  {{ folder.imageCount || 0 }} {{ folder.imageCount === 1 ? 'Bild' : 'Bilder' }}
                 </span>
                 <span class="item-type">Ordner</span>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- Image Card -->
-          <div v-else class="image-card">
+      <!-- Images Section -->
+      <div v-if="images.length > 0" class="images-section">
+        <div class="images-grid">
+          <div 
+            v-for="(image, index) in images" 
+            :key="image.id"
+            class="image-item"
+            @click="handleImageClick(image, index)"
+          >
             <div class="image-wrapper">
               <img 
-                :src="(item.data as GalleryImage).thumbnailUrl || (item.data as GalleryImage).imageUrl" 
-                :alt="(item.data as GalleryImage).title || 'Galerie Bild'"
+                :src="image.thumbnailUrl || image.imageUrl" 
+                :alt="image.title || 'Galerie Bild'"
                 loading="lazy"
                 class="gallery-image"
               />
@@ -80,12 +87,9 @@
                 </div>
               </div>
             </div>
-            <h3 v-if="(item.data as GalleryImage).title" class="image-title">
-              {{ (item.data as GalleryImage).title }}
+            <h3 v-if="image.title" class="image-title">
+              {{ image.title }}
             </h3>
-            <div class="image-meta">
-              <span class="item-type">Bild</span>
-            </div>
           </div>
         </div>
       </div>
@@ -105,6 +109,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { GalleryFolder, GalleryImage } from '../lib/types'
 
 interface MixedGalleryItem {
@@ -116,7 +121,7 @@ interface MixedGalleryItem {
   coverImage?: GalleryImage | null
 }
 
-defineProps<{
+const props = defineProps<{
   items: MixedGalleryItem[]
   loading: boolean
   error: string | null
@@ -128,12 +133,29 @@ const emit = defineEmits<{
   'retry': []
 }>()
 
-const handleItemClick = (item: MixedGalleryItem) => {
-  if (item.type === 'folder') {
-    emit('folder-selected', item.data as GalleryFolder)
-  } else {
-    emit('image-clicked', { image: item.data as GalleryImage, index: 0 })
-  }
+// Separate folders and images
+const folders = computed(() => 
+  props.items
+    .filter(item => item.type === 'folder')
+    .map(item => ({
+      ...(item.data as GalleryFolder),
+      imageCount: item.imageCount,
+      coverImage: item.coverImage
+    }))
+)
+
+const images = computed(() => 
+  props.items
+    .filter(item => item.type === 'image')
+    .map(item => item.data as GalleryImage)
+)
+
+const handleFolderClick = (folder: GalleryFolder) => {
+  emit('folder-selected', folder)
+}
+
+const handleImageClick = (image: GalleryImage, index: number) => {
+  emit('image-clicked', { image, index })
 }
 </script>
 
@@ -174,14 +196,32 @@ const handleItemClick = (item: MixedGalleryItem) => {
   width: 100%;
 }
 
-.gallery-grid {
+.section-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary);
+  margin: 0 0 var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.folders-section {
+  margin-bottom: var(--spacing-3xl);
+}
+
+.images-section {
+  margin-top: var(--spacing-3xl);
+}
+
+.folders-grid,
+.images-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--spacing-xl);
   padding: var(--spacing-lg) 0;
 }
 
-.gallery-item {
+.folder-item,
+.image-item {
   background: var(--color-white);
   border-radius: var(--radius-lg);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -191,24 +231,21 @@ const handleItemClick = (item: MixedGalleryItem) => {
   border: 1px solid var(--color-gray-200);
 }
 
-.gallery-item:hover {
+.folder-item:hover,
+.image-item:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.gallery-item.folder-item {
+.folder-item {
   border-color: var(--color-primary);
 }
 
-.gallery-item.folder-item:hover {
+.folder-item:hover {
   border-color: var(--color-accent);
 }
 
 /* Folder Styles */
-.folder-card {
-  width: 100%;
-}
-
 .folder-cover {
   position: relative;
   width: 100%;
@@ -224,7 +261,7 @@ const handleItemClick = (item: MixedGalleryItem) => {
   transition: transform var(--transition-normal);
 }
 
-.gallery-item:hover .cover-image {
+.folder-item:hover .cover-image {
   transform: scale(1.05);
 }
 
@@ -251,7 +288,7 @@ const handleItemClick = (item: MixedGalleryItem) => {
   transition: opacity var(--transition-normal);
 }
 
-.gallery-item:hover .folder-overlay {
+.folder-item:hover .folder-overlay {
   opacity: 1;
 }
 
@@ -279,6 +316,7 @@ const handleItemClick = (item: MixedGalleryItem) => {
   line-height: var(--line-height-relaxed);
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -306,10 +344,6 @@ const handleItemClick = (item: MixedGalleryItem) => {
 }
 
 /* Image Styles */
-.image-card {
-  width: 100%;
-}
-
 .image-wrapper {
   position: relative;
   width: 100%;
@@ -324,7 +358,7 @@ const handleItemClick = (item: MixedGalleryItem) => {
   transition: transform var(--transition-normal);
 }
 
-.gallery-item:hover .gallery-image {
+.image-item:hover .gallery-image {
   transform: scale(1.05);
 }
 
@@ -342,7 +376,7 @@ const handleItemClick = (item: MixedGalleryItem) => {
   transition: opacity var(--transition-normal);
 }
 
-.gallery-item:hover .image-overlay {
+.image-item:hover .image-overlay {
   opacity: 1;
 }
 
@@ -354,12 +388,6 @@ const handleItemClick = (item: MixedGalleryItem) => {
   padding: var(--spacing-md);
   text-align: center;
   line-height: var(--line-height-tight);
-}
-
-.image-meta {
-  padding: 0 var(--spacing-md) var(--spacing-md);
-  display: flex;
-  justify-content: flex-end;
 }
 
 .empty-state {
@@ -384,7 +412,8 @@ const handleItemClick = (item: MixedGalleryItem) => {
 
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
-  .gallery-grid {
+  .folders-grid,
+  .images-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: var(--spacing-lg);
   }
@@ -401,10 +430,15 @@ const handleItemClick = (item: MixedGalleryItem) => {
   .folder-name {
     font-size: var(--font-size-base);
   }
+  
+  .section-title {
+    font-size: var(--font-size-xl);
+  }
 }
 
 @media (max-width: 480px) {
-  .gallery-grid {
+  .folders-grid,
+  .images-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }

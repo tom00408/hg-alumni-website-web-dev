@@ -374,14 +374,6 @@ onMounted(async () => {
   margin: 0 auto;
 }
 
-.about-title {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-secondary);
-  text-align: center;
-  margin-bottom: var(--spacing-md);
-  line-height: var(--line-height-tight);
-}
 
 .about-subtitle {
   font-size: var(--font-size-xl);
@@ -492,9 +484,6 @@ onMounted(async () => {
     gap: var(--spacing-lg);
   }
   
-  .about-title {
-    font-size: var(--font-size-2xl);
-  }
   
   .about-subtitle {
     font-size: var(--font-size-lg);

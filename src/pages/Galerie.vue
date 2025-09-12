@@ -2,10 +2,7 @@
   <div class="galerie">
     <!-- Header -->
     <div class="page-header">
-      <h1 class="page-title">Galerie</h1>
-      <p class="page-subtitle">
-        Bilder von Veranstaltungen, Treffen und besonderen Momenten unserer Alumni-Gemeinschaft
-      </p>
+      <h1 class="page-title">Unsere Galerie</h1>
     </div>
 
     <!-- Mixed Gallery View -->
@@ -197,14 +194,6 @@ onMounted(async () => {
   line-height: var(--line-height-tight);
 }
 
-.page-subtitle {
-  font-size: var(--font-size-lg);
-  color: var(--color-gray-600);
-  margin: 0;
-  line-height: var(--line-height-relaxed);
-  max-width: 600px;
-  margin: 0 auto;
-}
 
 /* Folder Detail Overlay */
 .folder-detail-overlay {
@@ -339,6 +328,7 @@ onMounted(async () => {
   border-radius: var(--radius-full);
 }
 
+
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
   .galerie {
@@ -369,5 +359,8 @@ onMounted(async () => {
   .lightbox-next {
     margin-right: -20px;
   }
+
+
+ 
 }
 </style>
