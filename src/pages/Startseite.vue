@@ -484,6 +484,9 @@ onMounted(async () => {
     gap: var(--spacing-lg);
   }
   
+  .about-title {
+    font-size: var(--font-size-2xl);
+  }
   
   .about-subtitle {
     font-size: var(--font-size-lg);

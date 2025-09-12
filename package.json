@@ -15,6 +15,7 @@
     "check:css": "tsx scripts/check-css.ts"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.2.0",
     "firebase": "^12.2.1",
     "pinia": "^2.1.7",
     "vue": "^3.5.18",

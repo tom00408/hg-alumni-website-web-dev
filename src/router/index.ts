@@ -68,6 +68,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/satzung',
+      name: 'satzung',
+      component: () => import('../pages/Satzung.vue'),
+      meta: {
+        title: 'Satzung'
+      }
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('../pages/NotFound.vue'),
