@@ -252,11 +252,4 @@ onMounted(async () => {
   }
 }
 
-/* Staggered Animation für Grid Items */
-.news-grid .news-card:nth-child(1) { animation-delay: 0.1s; }
-.news-grid .news-card:nth-child(2) { animation-delay: 0.2s; }
-.news-grid .news-card:nth-child(3) { animation-delay: 0.3s; }
-.news-grid .news-card:nth-child(4) { animation-delay: 0.4s; }
-.news-grid .news-card:nth-child(5) { animation-delay: 0.5s; }
-.news-grid .news-card:nth-child(6) { animation-delay: 0.6s; }
 </style>

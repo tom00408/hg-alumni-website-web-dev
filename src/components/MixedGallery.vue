@@ -196,13 +196,6 @@ const handleImageClick = (image: GalleryImage, index: number) => {
   width: 100%;
 }
 
-.section-title {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-secondary);
-  margin: 0 0 var(--spacing-xl) 0;
-  text-align: center;
-}
 
 .folders-section {
   margin-bottom: var(--spacing-3xl);
@@ -431,9 +424,6 @@ const handleImageClick = (image: GalleryImage, index: number) => {
     font-size: var(--font-size-base);
   }
   
-  .section-title {
-    font-size: var(--font-size-xl);
-  }
 }
 
 @media (max-width: 480px) {

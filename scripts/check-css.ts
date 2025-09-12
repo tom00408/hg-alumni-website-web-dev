@@ -77,7 +77,7 @@ async function main() {
 		//console.log(unusedStyles);
 		const fileReport: fileReport = {
 			file,
-			isClean: unusedStyles.length === 0 && missingStyles.length === 0,
+			isClean: (unusedStyles.length === 0  || !ungenutzteStylesAnzeigen) && (missingStyles.length === 0 || !fehlendeStylesAnzeigen),
 			unusedStyles,
 			missingStyles,
 		};

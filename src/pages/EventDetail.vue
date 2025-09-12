@@ -317,15 +317,6 @@ onMounted(async () => {
   flex-wrap: wrap;
 }
 
-.related-events {
-  margin-top: var(--spacing-2xl);
-}
-
-.related-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-lg);
-}
 
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
@@ -348,9 +339,6 @@ onMounted(async () => {
     align-items: center;
   }
   
-  .related-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 480px) {
