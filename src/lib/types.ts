@@ -62,7 +62,8 @@ export interface MembershipApplication {
   placeDate: string
   signature: string
   createdAt?: Timestamp
-  status?: 'pending' | 'approved' | 'rejected'
+  status?: 'new' | 'in_progress' | 'approved' | 'rejected'
+
 }
 
 // Navigation Types
