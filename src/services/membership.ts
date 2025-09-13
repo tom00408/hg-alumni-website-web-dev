@@ -6,7 +6,7 @@ import {
 import { db } from '../lib/firebase'
 import type { MembershipApplication } from '../lib/types'
 
-const COLLECTION_NAME = 'membershipApplications'
+const COLLECTION_NAME = 'applications'
 
 /**
  * Neue Mitgliedschaftsanfrage erstellen
@@ -69,9 +69,39 @@ export const validateMembershipApplication = (
 ): { isValid: boolean; errors: string[] } => {
   const errors: string[] = []
   
+  // Anrede validieren
+  if (!data.salutation) {
+    errors.push('Anrede ist erforderlich')
+  }
+  
+  // Vorname validieren
+  if (!data.firstName || data.firstName.trim().length < 2) {
+    errors.push('Vorname muss mindestens 2 Zeichen lang sein')
+  }
+  
   // Name validieren
-  if (!data.name || data.name.trim().length < 2) {
+  if (!data.lastName || data.lastName.trim().length < 2) {
     errors.push('Name muss mindestens 2 Zeichen lang sein')
+  }
+  
+  // Adresse validieren
+  if (!data.address || data.address.trim().length < 5) {
+    errors.push('Adresse muss mindestens 5 Zeichen lang sein')
+  }
+  
+  // PLZ validieren
+  if (!data.postalCode || data.postalCode.trim().length === 5) {
+    errors.push('PLZ ist erforderlich und muss gültig sein')
+  }
+  
+  // Ort validieren
+  if (!data.city || data.city.trim().length < 2) {
+    errors.push('Ort ist erforderlich')
+  }
+  
+  // Geburtsdatum validieren
+  if (!data.birthDate) {
+    errors.push('Geburtsdatum ist erforderlich')
   }
   
   // E-Mail validieren
@@ -80,15 +110,24 @@ export const validateMembershipApplication = (
     errors.push('Bitte geben Sie eine gültige E-Mail-Adresse ein')
   }
   
-  // Abschlussjahr validieren (optional, aber wenn angegeben, muss es gültig sein)
-  if (data.graduationYear !== undefined) {
-    const currentYear = new Date().getFullYear()
-    const minYear = 1950
-    const maxYear = currentYear + 10
-    
-    if (data.graduationYear < minYear || data.graduationYear > maxYear) {
-      errors.push(`Abschlussjahr muss zwischen ${minYear} und ${maxYear} liegen`)
-    }
+  // IBAN validieren
+  if (!data.iban || data.iban.trim().length === 22) {
+    errors.push('IBAN ist erforderlich und muss gültig sein')
+  }
+  
+  // BIC validieren
+  if (!data.bic || data.bic.trim().length < 8) {
+    errors.push('BIC ist erforderlich und muss gültig sein')
+  }
+  
+  // Ort und Datum validieren
+  if (!data.placeDate || data.placeDate.trim().length < 3) {
+    errors.push('Ort und Datum sind erforderlich')
+  }
+  
+  // Unterschrift validieren
+  if (!data.signature || data.signature.trim().length < 2) {
+    errors.push('Unterschrift ist erforderlich')
   }
   
   return {
@@ -117,11 +156,21 @@ export const formatApplicationForEmail = (application: MembershipApplication): s
   return `
 Neue Mitgliedschaftsanfrage
 
-Name: ${application.name}
+Anrede: ${application.salutation}
+Name: ${application.lastName}
+Vorname: ${application.firstName}
+Adresse: ${application.address}
+PLZ: ${application.postalCode}
+Ort: ${application.city}
+Geburtsdatum: ${application.birthDate}
+Beruf: ${application.occupation || 'Nicht angegeben'}
 E-Mail: ${application.email}
-Abschlussjahr: ${application.graduationYear || 'Nicht angegeben'}
-Beziehung zur Schule: ${application.relation || 'Nicht angegeben'}
-Nachricht: ${application.message || 'Keine Nachricht'}
+Schulbesuch von: ${application.schoolFrom || 'Nicht angegeben'}
+Schulbesuch bis: ${application.schoolTo || 'Nicht angegeben'}
+IBAN: ${application.iban}
+BIC: ${application.bic}
+Ort, Datum: ${application.placeDate}
+Unterschrift: ${application.signature}
 
 Eingereicht am: ${formatDate(application.createdAt)}
 Status: ${application.status}
