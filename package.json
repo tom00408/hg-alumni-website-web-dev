@@ -13,7 +13,6 @@
     "check:types": "vue-tsc -b",
     "check:file-sizes": "tsx scripts/check-file-sizes.ts",
     "check:css": "tsx scripts/check-css.ts",
-    "test:membership": "tsx scripts/test-membership-service.ts"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
