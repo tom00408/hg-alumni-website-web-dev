@@ -84,6 +84,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/profil',
+      name: 'profil',
+      component: () => import('../pages/Profil.vue'),
+      meta: {
+        title: 'Mein Profil',
+        requiresAuth: true
+      }
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('../pages/NotFound.vue'),

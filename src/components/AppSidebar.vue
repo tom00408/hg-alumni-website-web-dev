@@ -99,15 +99,12 @@
           </div>
           <span class="mobile-title">Alumni-Verein</span>
         </div>
-        <button 
-          class="mobile-close-btn"
-          @click="$emit('close')"
-          aria-label="Menü schließen"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        </button>
+        <TomButton 
+        @click="closeSidebar"
+        title="Menü schließen"
+        icon="close"
+        variant="action"
+        />
       </div>
       
       <nav class="mobile-nav">
@@ -148,6 +145,38 @@
             </svg>
           </router-link>
         </div>
+
+        <!-- Mobile User Section (für angemeldete Benutzer) -->
+        <div v-if="authStore.isAuthenticated" class="mobile-user-section">
+          <div class="mobile-user-divider"></div>
+          
+          <!-- Mobile Profil Link -->
+          <router-link 
+            to="/profil"
+            class="mobile-user-link"
+            :class="{ 'mobile-user-link--active': $route.name === 'profil' }"
+            @click="$emit('close')"
+          >
+            <div class="mobile-user-avatar">
+              <span class="mobile-avatar-text">{{ getUserInitials() }}</span>
+            </div>
+            <div class="mobile-user-info">
+              <span class="mobile-user-name">Dein Profil</span>
+              <span class="mobile-user-email">{{ authStore.user?.displayName }}</span>
+            </div>
+            <svg class="mobile-nav-arrow" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+            </svg>
+          </router-link>
+
+          <!-- Mobile Logout Button -->
+          <button @click="handleMobileLogout" class="mobile-logout-btn">
+            <svg class="mobile-logout-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+            </svg>
+            <span class="mobile-logout-label">Abmelden</span>
+          </button>
+        </div>
       </nav>
       
       <div class="mobile-nav-footer">
@@ -162,6 +191,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import type { NavigationItem } from '../lib/types'
+import TomButton from '../tomponents/TomButton.vue'
 
 interface Props {
   isOpen?: boolean
@@ -199,6 +229,20 @@ const handleLogout = async () => {
   } catch (error) {
     console.error('Logout error:', error)
   }
+}
+
+const handleMobileLogout = async () => {
+  try {
+    await authStore.signOut()
+    emit('close')
+    router.push('/')
+  } catch (error) {
+    console.error('Mobile logout error:', error)
+  }
+}
+
+const closeSidebar = () => {
+  emit('close')
 }
 
 
@@ -817,6 +861,127 @@ const visibleNavigationItems = computed(() => {
   font-size: var(--font-size-sm);
   color: var(--color-gray-600);
   margin: 0;
+}
+
+/* Mobile User Section */
+.mobile-user-section {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+}
+
+.mobile-user-divider {
+  height: 1px;
+  background: var(--color-gray-200);
+  margin: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
+}
+
+.mobile-user-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-lg);
+  margin: 0 var(--spacing-md) var(--spacing-sm) var(--spacing-md);
+  position: relative;
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-gray-50);
+}
+
+.mobile-user-link:hover {
+  background-color: var(--color-gray-100);
+  transform: translateX(4px);
+  border-color: var(--color-gray-300);
+}
+
+.mobile-user-link--active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
+
+.mobile-user-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mobile-avatar-text {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+}
+
+.mobile-user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mobile-user-name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-user-email {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-user-link--active .mobile-user-email {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.mobile-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-white);
+  color: var(--color-error);
+  border: 1px solid var(--color-error-light);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+  margin: 0 var(--spacing-md);
+  width: calc(100% - calc(var(--spacing-md) * 2));
+}
+
+.mobile-logout-btn:hover {
+  background: var(--color-error-light);
+  color: var(--color-error-dark);
+  transform: translateX(4px);
+  border-color: var(--color-error);
+}
+
+.mobile-logout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mobile-logout-label {
+  flex: 1;
+  text-align: left;
 }
 
 /* Slide-in Animation */
