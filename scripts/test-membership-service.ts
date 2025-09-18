@@ -2,9 +2,8 @@ import { createMembershipApplication } from '../src/services/membership'
 import { MembershipApplication } from '../src/lib/types'
 import { Timestamp } from 'firebase/firestore'
 
-const testApplication : MembershipApplication = createTestApplication();
 
-
+const testApplication : MembershipApplication = getTestApplication();
 const res = await createMembershipApplication(testApplication);
 console.log(res);
 
@@ -18,7 +17,7 @@ function getRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-export function createTestApplication(): MembershipApplication {
+export function getTestApplication(): MembershipApplication {
   const salutations = ["Herr", "Frau", "Divers"];
   const firstNames = ["Magdalena", "Thomas", "Lena", "Max", "Sophie", "Jonas"];
   const lastNames = ["Nienaber", "Müller", "Schmidt", "Becker", "Tiedtke"];

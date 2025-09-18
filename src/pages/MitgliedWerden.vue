@@ -208,6 +208,60 @@
 									errors.email
 								}}</span>
 							</div>
+						</div>
+
+						<!-- Account-Erstellung -->
+						<div class="form-section-header">
+							<h3>Online-Account erstellen</h3>
+						</div>
+
+						<div class="account-creation-info">
+							<p>
+								<strong>Online-Account erforderlich:</strong> Für die Mitgliedschaft muss ein Account erstellt werden. 
+								Damit können Sie sich in Zukunft anmelden und haben Zugang zu exklusiven Mitgliederbereichen.
+							</p>
+						</div>
+
+						<div class="form-fields">
+							<div class="account-fields">
+								<div class="form-field">
+									<label for="password" class="form-label"
+										>Passwort *</label
+									>
+									<input
+										id="password"
+										v-model="form.password"
+										type="password"
+										class="form-input"
+										:class="{
+											'form-input--error': errors.password,
+										}"
+										placeholder="Mindestens 6 Zeichen"
+										required />
+									<span v-if="errors.password" class="form-error">{{
+										errors.password
+									}}</span>
+								</div>
+
+								<div class="form-field">
+									<label for="confirmPassword" class="form-label"
+										>Passwort bestätigen *</label
+									>
+									<input
+										id="confirmPassword"
+										v-model="form.confirmPassword"
+										type="password"
+										class="form-input"
+										:class="{
+											'form-input--error': errors.confirmPassword,
+										}"
+										placeholder="Passwort wiederholen"
+										required />
+									<span v-if="errors.confirmPassword" class="form-error">{{
+										errors.confirmPassword
+									}}</span>
+								</div>
+							</div>
 
 							<div class="form-field">
 								<label class="form-label"
@@ -379,6 +433,25 @@
 							}}</span>
 						</div>
 
+						<!-- Error Message -->
+						<div v-if="submitError" class="error-message">
+							<div class="error-icon">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+									<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+									<path d="M11 7h2v2h-2zm0 4h2v6h-2z"/>
+								</svg>
+							</div>
+							<div class="error-content">
+								<strong>Fehler aufgetreten</strong>
+								<p>{{ submitError }}</p>
+							</div>
+							<button @click="submitError = null" class="error-close" type="button">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+									<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+								</svg>
+							</button>
+						</div>
+
 						<!-- Submit Button -->
 						<div class="form-actions">
 							<button
@@ -423,11 +496,14 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
+import { useAuthStore } from '../stores/auth';
 import HgCard from '../components/HgCard.vue';
 // import type { MembershipApplication } from '../lib/types'
 
+const authStore = useAuthStore();
 const submitting = ref(false);
 const submitted = ref(false);
+const submitError = ref<string | null>(null);
 
 const form = reactive({
 	salutation: '',
@@ -446,6 +522,10 @@ const form = reactive({
 	placeDate: '',
 	signature: '',
 	consent: false,
+	// Account-Erstellung (Pflicht)
+	createAccount: true,  // Immer true, nicht mehr änderbar
+	password: '',
+	confirmPassword: '',
 });
 
 const errors = ref<Record<string, string>>({});
@@ -591,6 +671,20 @@ const validateForm = () => {
 		errors.value.consent = 'Bitte stimmen Sie der Datenverarbeitung zu';
 	}
 
+	// Passwort validieren (immer erforderlich)
+	if (!form.password) {
+		errors.value.password = 'Passwort ist erforderlich';
+	} else if (form.password.length < 6) {
+		errors.value.password = 'Passwort muss mindestens 6 Zeichen lang sein';
+	}
+
+	// Passwort bestätigen (immer erforderlich)
+	if (!form.confirmPassword) {
+		errors.value.confirmPassword = 'Passwort-Bestätigung ist erforderlich';
+	} else if (form.password !== form.confirmPassword) {
+		errors.value.confirmPassword = 'Passwörter stimmen nicht überein';
+	}
+
 	return Object.keys(errors.value).length === 0;
 };
 
@@ -600,10 +694,30 @@ const submitApplication = async () => {
 		}
 
 		submitting.value = true;
+		submitError.value = null; // Fehler zurücksetzen
 
 		try {
-			const { createMembershipApplication } = await import(
-				'../services/membership'
+			// Account erstellen (immer erforderlich)
+			let userId: string;
+			try {
+				const authUser = await authStore.register({
+					email: form.email,
+					password: form.password,
+					firstName: form.firstName,
+					lastName: form.lastName,
+					salutation: form.salutation
+				});
+				userId = authUser.uid;
+				console.log('Account created successfully:', userId);
+			} catch (authError) {
+				console.error('Error creating account:', authError);
+				const errorMessage = (authError as Error).message;
+				submitError.value = `Fehler beim Erstellen des Accounts: ${errorMessage}`;
+				return;
+			}
+
+			const { submitMembershipApplication } = await import(
+				'../services/users'
 			);
 
 			const application = {
@@ -626,9 +740,12 @@ const submitApplication = async () => {
 
 			console.log('Submitting application:', application);
 
-			await createMembershipApplication(application);
+			// userId ist jetzt garantiert verfügbar
+
+			await submitMembershipApplication(userId, application);
 
 			submitted.value = true;
+			submitError.value = null;
 
 			// Form zurücksetzen
 			Object.assign(form, {
@@ -648,10 +765,14 @@ const submitApplication = async () => {
 				placeDate: '',
 				signature: '',
 				consent: false,
+				createAccount: true,
+				password: '',
+				confirmPassword: '',
 			});
 		} catch (error) {
 			console.error('Error submitting application:', error);
-			// TODO: Zeige Fehlermeldung
+			const errorMessage = (error as Error).message || 'Ein unbekannter Fehler ist aufgetreten';
+			submitError.value = `Fehler beim Einreichen des Antrags: ${errorMessage}`;
 		} finally {
 			submitting.value = false;
 		}
@@ -818,6 +939,29 @@ const submitApplication = async () => {
 	margin-bottom: 0;
 }
 
+.account-creation-info {
+	background-color: var(--color-primary-50, rgba(59, 130, 246, 0.05));
+	padding: var(--spacing-md);
+	border-radius: var(--radius-md);
+	margin-bottom: var(--spacing-lg);
+	border-left: 4px solid var(--color-primary);
+}
+
+.account-creation-info p {
+	margin: 0;
+	color: var(--color-gray-700);
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-relaxed);
+}
+
+.account-fields {
+	margin-top: var(--spacing-md);
+	padding: var(--spacing-md);
+	background-color: var(--color-primary-50, rgba(59, 130, 246, 0.05));
+	border-radius: var(--radius-md);
+	border: 1px solid var(--color-primary-200, rgba(59, 130, 246, 0.2));
+}
+
 /* Signature-Styles entfernt - jetzt normale form-fields */
 
 .form-input-underline {
@@ -882,6 +1026,67 @@ const submitApplication = async () => {
 	color: var(--color-error);
 	font-size: var(--font-size-sm);
 	font-weight: var(--font-weight-medium);
+}
+
+.error-message {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--spacing-md);
+	padding: var(--spacing-lg);
+	background-color: rgba(239, 68, 68, 0.1);
+	border: 1px solid rgba(239, 68, 68, 0.2);
+	border-radius: var(--radius-md);
+	margin-bottom: var(--spacing-lg);
+	position: relative;
+}
+
+.error-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	color: var(--color-error);
+}
+
+.error-content {
+	flex: 1;
+	min-width: 0;
+}
+
+.error-content strong {
+	display: block;
+	color: var(--color-error);
+	font-weight: var(--font-weight-semibold);
+	margin-bottom: var(--spacing-xs);
+}
+
+.error-content p {
+	color: var(--color-error);
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-relaxed);
+	margin: 0;
+	word-break: break-word;
+}
+
+.error-close {
+	position: absolute;
+	top: var(--spacing-sm);
+	right: var(--spacing-sm);
+	background: none;
+	border: none;
+	color: var(--color-error);
+	cursor: pointer;
+	padding: var(--spacing-xs);
+	border-radius: var(--radius-sm);
+	transition: all var(--transition-fast);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.error-close:hover {
+	background-color: rgba(239, 68, 68, 0.1);
+	color: #dc2626;
 }
 
 .form-checkbox {

@@ -43,27 +43,60 @@ export interface GalleryFolder {
   updatedAt?: Timestamp
 }
 
-// Membership Application Types
-export interface MembershipApplication {
-  id?: string
+// User Types - Vereint Membership Application und Member Data
+export interface User {
+  // Firebase Auth ID als Document ID
+  uid: string
+  
+  // Persönliche Daten
   salutation: string
   firstName: string
   lastName: string
+  displayName?: string
+  email: string
+  
+  // Adressdaten
   address: string
   postalCode: string
   city: string
   birthDate: string
   occupation?: string
-  email: string
+  
+  // Schulzeit (optional)
   schoolFrom?: string
   schoolTo?: string
+  
+  // Bankdaten
   iban: string
   bic: string
-  placeDate: string
-  signature: string
-  createdAt?: Timestamp
-  status?: 'new' | 'in_progress' | 'approved' | 'rejected'
+  
+  // Application-spezifische Felder
+  placeDate?: string  // Nur bei Antrag
+  signature?: string  // Nur bei Antrag
+  applicationCreatedAt?: Timestamp
+  applicationStatus: 'new' | 'in_progress' | 'approved' | 'rejected'
+  
+  // Member-spezifische Felder
+  memberSince?: Timestamp  // Wird gesetzt wenn approved
+  membershipNumber?: string  // Wird bei Approval generiert
+  membershipStatus: 'pending' | 'active' | 'inactive' | 'suspended'
+  
+  // System-Felder
+  role: 'member'  // Admin-Rolle entfernt - wird in separater Admin-Website verwaltet
+  createdAt: Timestamp
+  updatedAt?: Timestamp
+}
 
+// Legacy Types für Kompatibilität
+export interface MembershipApplication extends Omit<User, 'uid' | 'memberSince' | 'membershipNumber' | 'membershipStatus' | 'role'> {
+  id?: string
+  userId?: string
+}
+
+export interface Member extends Omit<User, 'placeDate' | 'signature' | 'applicationCreatedAt' | 'applicationStatus'> {
+  id?: string
+  status: 'active' | 'inactive' | 'suspended'  // Alias für membershipStatus
+  applicationId?: string
 }
 
 // Navigation Types
@@ -92,4 +125,16 @@ export interface LoadingState {
 export interface ValidationError {
   field: string
   message: string
+}
+
+// Navigation Visibility Types
+export type NavVisibility = 'always' | 'authenticated' | 'unauthenticated'
+
+// Navigation Item Types
+export interface NavigationItem {
+  id: string
+  label: string
+  route: string
+  icon: string
+  visibility: NavVisibility
 }

@@ -116,20 +116,19 @@ const backToFolders = () => {
 }
 
 
-const openLightboxFromFolder = ({ image, index }: { image: GalleryImage, index: number }) => {
+const openLightboxFromFolder = ({ index }: { image: GalleryImage, index: number }) => {
   currentImageIndex.value = index
   allImages.value = currentFolderImages.value
   lightboxVisible.value = true
 }
 
-const openLightboxFromMixed = ({ image, index }: { image: GalleryImage, index: number }) => {
+const openLightboxFromMixed = ({ index }: { image: GalleryImage, index: number }) => {
   // Finde alle unorganisierten Bilder für die Lightbox
   const unorganizedImages = foldersStore.mixedGalleryItems
     .filter(item => item.type === 'image')
     .map(item => item.data as GalleryImage)
   
-  const imageIndex = unorganizedImages.findIndex(img => img.id === image.id)
-  currentImageIndex.value = imageIndex >= 0 ? imageIndex : 0
+  currentImageIndex.value = index
   allImages.value = unorganizedImages
   lightboxVisible.value = true
 }
