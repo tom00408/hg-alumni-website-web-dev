@@ -4,7 +4,7 @@ import {
   getDoc, 
   Timestamp 
 } from 'firebase/firestore'
-import { httpsCallable, getFunctions } from 'firebase/functions'
+import { httpsCallable } from 'firebase/functions'
 import { db, functions, auth } from '../lib/firebase'
 import type { User, MembershipApplication, SubmitEmailData } from '../lib/types'
 
@@ -129,10 +129,10 @@ const sendApplicationNotification = async (user: User): Promise<void> => {
   const eingangsBestaetigung = httpsCallable(functions, "eingangsBestaetigung");
 
   try {
-    const result = await eingangsBestaetigung({ submitEmailData: data });
-    console.log("✅✅✅✅✅✅Mail gesendet:", result.data);
+    await eingangsBestaetigung({ submitEmailData: data });
+    //console.log("✅✅✅✅✅✅Mail gesendet:", result.data);
   } catch (err) {
-    console.error("❌❌❌❌❌❌Fehler beim Senden:", err);
+    //console.error("❌❌❌❌❌❌Fehler beim Senden:", err);
     throw err;
   }
 

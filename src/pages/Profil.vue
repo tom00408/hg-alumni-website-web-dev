@@ -196,7 +196,6 @@ const authStore = useAuthStore()
 // State
 const isEditing = ref(false)
 const isSaving = ref(false)
-const showDeleteDialog = ref(false)
 const message = ref('')
 const messageType = ref<'success' | 'error'>('success')
 
