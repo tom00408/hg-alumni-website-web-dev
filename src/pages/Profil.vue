@@ -167,61 +167,23 @@
         </div>
       </div>
 
-      <!-- Account Aktionen -->
       <div class="profile-section">
         <div class="section-header">
-          <h2>Account-Einstellungen</h2>
+          <h2>Änderung von Account-Informationen</h2>
         </div>
-
-        <div class="account-actions">
-          <button @click="showPasswordChangeDialog = true" class="action-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-            </svg>
-            Passwort ändern
-          </button>
-
-          <button @click="showDeleteDialog = true" class="action-btn action-btn--danger">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-            </svg>
-            Account löschen
-          </button>
-        </div>
+        <p>
+          Sollten Sie Ihre Account-Informationen ändern wollen, wenden Sie sich bitte an <a href="mailto:info@alumni-hg-goettingen.de">info@alumni-hg-goettingen.de</a>.
+        </p>
       </div>
-    </div>
+
+     
 
     <!-- Error/Success Messages -->
     <div v-if="message" class="message" :class="messageType">
       {{ message }}
     </div>
-
-    <!-- Password Change Dialog -->
-    <div v-if="showPasswordChangeDialog" class="dialog-overlay" @click="showPasswordChangeDialog = false">
-      <div class="dialog" @click.stop>
-        <h3>Passwort ändern</h3>
-        <p>Diese Funktion ist noch nicht implementiert.</p>
-        <button @click="showPasswordChangeDialog = false" class="dialog-btn">
-          Schließen
-        </button>
-      </div>
-    </div>
-
-    <!-- Delete Account Dialog -->
-    <div v-if="showDeleteDialog" class="dialog-overlay" @click="showDeleteDialog = false">
-      <div class="dialog" @click.stop>
-        <h3>Account löschen</h3>
-        <p>Diese Aktion kann nicht rückgängig gemacht werden. Alle deine Daten werden permanent gelöscht.</p>
-        <div class="dialog-actions">
-          <button @click="showDeleteDialog = false" class="dialog-btn">
-            Abbrechen
-          </button>
-          <button @click="deleteAccount" class="dialog-btn dialog-btn--danger">
-            Account löschen
-          </button>
-        </div>
-      </div>
-    </div>
+  </div>
+    
   </div>
 </template>
 
@@ -234,7 +196,6 @@ const authStore = useAuthStore()
 // State
 const isEditing = ref(false)
 const isSaving = ref(false)
-const showPasswordChangeDialog = ref(false)
 const showDeleteDialog = ref(false)
 const message = ref('')
 const messageType = ref<'success' | 'error'>('success')
@@ -344,8 +305,7 @@ const saveChanges = async () => {
       city: editForm.value.city,
       birthDate: editForm.value.birthDate,
       iban: editForm.value.iban,
-      bic: editForm.value.bic,
-      updatedAt: new Date().toISOString()
+      bic: editForm.value.bic
     }
 
     await updateUser(authStore.user.uid, updateData)
@@ -373,17 +333,7 @@ const saveChanges = async () => {
   }
 }
 
-const deleteAccount = async () => {
-  // Placeholder für Account-Löschung
-  console.log('Delete account functionality not yet implemented')
-  showDeleteDialog.value = false
-  message.value = 'Account-Löschung ist noch nicht implementiert'
-  messageType.value = 'error'
-  
-  setTimeout(() => {
-    message.value = ''
-  }, 3000)
-}
+
 
 onMounted(() => {
   // Benutzer-Dokument laden falls noch nicht geladen

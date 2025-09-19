@@ -294,23 +294,21 @@ const allNavigationItems: NavigationItem[] = [
     </svg>`
   },
   {
-    id: 'impressum',
-    label: 'Impressum',
-    route: '/impressum',
-    visibility: 'always',
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
-    </svg>`
-  },
-  {
     id: 'satzung',
     label: 'Satzung',
     route: '/satzung',
     visibility: 'always',
     icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
       <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
-      <path d="M10 12h4v2h-4v-2z" opacity="0.7"/>
-      <path d="M10 15h4v1h-4v-1z" opacity="0.7"/>
+    </svg>`
+  },
+  {
+    id: 'impressum',
+    label: 'Impressum',
+    route: '/impressum',
+    visibility: 'always',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
     </svg>`
   }
 ]

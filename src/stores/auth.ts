@@ -6,8 +6,7 @@ import {
   registerWithEmail, 
   logout, 
   onAuthStateChange,
-  getCurrentUser,
-  getUserDocument
+  getCurrentUser
 } from '../services/auth'
 
 export const useAuthStore = defineStore('auth', () => {

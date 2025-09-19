@@ -105,11 +105,78 @@
           </section>
 
           <section class="impressum-section">
+            <h2>Barrierefreiheit</h2>
+            <div class="legal-text">
+              <p>
+                Wir bemühen uns, diese Website im Einklang mit den nationalen Rechtsvorschriften zur Umsetzung 
+                der Richtlinie (EU) 2016/2102 des Europäischen Parlaments barrierefrei zugänglich zu machen.
+              </p>
+              
+              <h3>Stand der Vereinbarkeit mit den Anforderungen</h3>
+              <p>
+                Diese Website ist mit den Web Content Accessibility Guidelines (WCAG) 2.1 auf Konformitätsstufe AA 
+                teilweise vereinbar. Die nachstehend aufgeführten Inhalte sind aus folgenden Gründen nicht barrierefrei:
+              </p>
+              
+              <h3>Nicht barrierefreie Inhalte</h3>
+              <p>
+                <strong>Unzureichende Konformität mit der Barrierefreiheit:</strong>
+              </p>
+              <ul>
+                <li>Einige Bilder in der Galerie verfügen möglicherweise nicht über ausreichende Alternativtexte</li>
+                <li>Einzelne Farbkontraste könnten die Mindestanforderungen unterschreiten</li>
+                <li>Nicht alle interaktiven Elemente sind vollständig über die Tastatur bedienbar</li>
+              </ul>
+              
+              <h3>Erstellung dieser Erklärung zur Barrierefreiheit</h3>
+              <p>
+                Diese Erklärung wurde am <strong>20. September 2025</strong> erstellt und zuletzt am 
+                <strong>{{ lastUpdatedBarrierefreiheit }}</strong> überprüft.
+              </p>
+              
+              <h3>Feedback und Kontaktangaben</h3>
+              <p>
+                Wenn Sie Mängel in Bezug auf die Einhaltung der Barrierefreiheitsanforderungen feststellen, 
+                können Sie sich gerne an uns wenden:
+              </p>
+              <div class="contact-info">
+                <p><strong>E-Mail:</strong> <a href="mailto:info@alumni-hg-goettingen.de">info@alumni-hg-goettingen.de</a></p>
+              </div>
+              <p>
+                Wir sind bemüht, Ihnen innerhalb von zwei Wochen eine Rückmeldung zu geben. Sollten Sie mit 
+                unserer Antwort nicht zufrieden sein, können Sie sich an die Schlichtungsstelle nach dem 
+                Behindertengleichstellungsgesetz wenden.
+              </p>
+              
+              <h3>Schlichtungsverfahren</h3>
+              <p>
+                Bei nicht zufriedenstellenden Antworten aus oben genannter Kontaktmöglichkeit können Sie bei der 
+                Schlichtungsstelle, eingerichtet bei der Beauftragten der Bundesregierung für die Belange von 
+                Menschen mit Behinderungen, einen Antrag auf Einleitung eines Schlichtungsverfahrens nach dem 
+                Behindertengleichstellungsgesetz (BGG) stellen.
+              </p>
+              <p>
+                <strong>Schlichtungsstelle BGG bei der Beauftragten der Bundesregierung für die Belange von Menschen mit Behinderungen</strong><br>
+                Mauerstraße 53<br>
+                10117 Berlin<br>
+                <strong>Telefon:</strong> +49 (0)30 18 527-2805<br>
+                <strong>E-Mail:</strong> <a href="mailto:info@schlichtungsstelle-bgg.de">info@schlichtungsstelle-bgg.de</a><br>
+                <strong>Internet:</strong> <a href="https://www.schlichtungsstelle-bgg.de" target="_blank" rel="noopener noreferrer">www.schlichtungsstelle-bgg.de</a>
+              </p>
+            </div>
+          </section>
+
+          <section class="impressum-section">
             <h2>Technische Umsetzung</h2>
             <div class="contact-info">
               <p><strong>Webentwicklung:</strong> HG Alumni IT-Team</p>
               <p><strong>Letzte Aktualisierung:</strong> {{ lastUpdated }}</p>
+              <p><strong>Impressum der Universität Göttingen:</strong><a href="https://www.uni-goettingen.de/de/439238.html" target="_blank" rel="noopener noreferrer">
+                  www.uni-goettingen.de/de/439238.html
+                </a></p>
             </div>
+            
+           
           </section>
         </div>
       </HgCard>
@@ -120,7 +187,8 @@
 <script setup lang="ts">
 import HgCard from '../components/HgCard.vue'
 
-const lastUpdated = import.meta.env.VITE_LAST_UPDATED
+const lastUpdated = import.meta.env.VITE_LAST_UPDATED_WEBSITE;
+const lastUpdatedBarrierefreiheit = import.meta.env.VITE_LAST_UPDATED_BARRIEREFREI;
 </script>
 
 <style scoped>
@@ -222,6 +290,16 @@ const lastUpdated = import.meta.env.VITE_LAST_UPDATED
 .legal-text a:hover {
   color: var(--color-accent);
   text-decoration: underline;
+}
+
+.legal-text ul {
+  margin: var(--spacing-md) 0;
+  padding-left: var(--spacing-lg);
+}
+
+.legal-text li {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
 }
 
 /* Responsive Design */

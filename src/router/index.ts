@@ -76,6 +76,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/datenschutz',
+      name: 'datenschutz',
+      component: () => import('../pages/Datenschutz.vue'),
+      meta: {
+        title: 'Datenschutzerklärung'
+      }
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../pages/Login.vue'),

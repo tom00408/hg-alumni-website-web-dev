@@ -24,15 +24,8 @@ export const submitMembershipApplication = async (
     const userDocRef = doc(db, COLLECTION_NAME, uid)
     
     // Prüfen ob User bereits existiert
-    let userDoc
-    try {
-      userDoc = await getDoc(userDocRef)
-      console.log('User doc exists:', userDoc.exists())
-    } catch (readError) {
-      console.error('Error reading user doc:', readError)
-      // Wenn lesen fehlschlägt, versuchen wir trotzdem zu schreiben
-      userDoc = { exists: () => false }
-    }
+    const userDoc = await getDoc(userDocRef)
+    console.log('User doc exists:', userDoc.exists())
     
     const applicationWithMetadata = {
       ...applicationData,
@@ -46,7 +39,7 @@ export const submitMembershipApplication = async (
     
     let userData: User
     
-    if (userDoc.exists && userDoc.exists()) {
+    if (userDoc.exists()) {
       // User existiert bereits - Merge mit bestehenden Daten und verwende setDoc
       console.log('User exists, merging data...')
       const existingData = userDoc.data()
@@ -54,7 +47,7 @@ export const submitMembershipApplication = async (
         ...existingData,
         ...applicationWithMetadata,
         // createdAt beibehalten, aber updatedAt aktualisieren
-        createdAt: existingData.createdAt || Timestamp.now()
+        createdAt: existingData?.createdAt || Timestamp.now()
       } as User
       
       console.log('Attempting setDoc with merge for existing user...')
@@ -116,7 +109,6 @@ export const updateUser = async (uid: string, updates: Partial<User>): Promise<v
   }
 }
 
-// Admin-Funktionen entfernt - werden in separater Admin-Website verwaltet
 
 /**
  * E-Mail-Benachrichtigung für neue Anträge senden

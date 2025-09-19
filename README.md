@@ -1,388 +1,484 @@
 # 🎓 Alumni-Website des Hainberg-Gymnasiums
 
-Eine moderne, responsive Vue.js-Anwendung für den Alumni-Verein des Hainberg-Gymnasiums Göttingen. Die Website ermöglicht es ehemaligen Schülern, sich zu vernetzen, über Veranstaltungen zu informieren und mit der Schule in Kontakt zu bleiben.
+Eine moderne, responsive Vue.js-Anwendung für den Alumni-Verein des Hainberg-Gymnasiums Göttingen e.V. Die Website ermöglicht es ehemaligen Schülern, sich zu vernetzen, über Veranstaltungen zu informieren und mit der Schule in Kontakt zu bleiben.
 
 ![Vue.js](https://img.shields.io/badge/Vue.js-3.5.18-4FC08D?style=flat&logo=vue.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=flat&logo=typescript)
-![Firebase](https://img.shields.io/badge/Firebase-10.7.1-FFCA28?style=flat&logo=firebase)
+![Firebase](https://img.shields.io/badge/Firebase-12.2.1-FFCA28?style=flat&logo=firebase)
 ![Pinia](https://img.shields.io/badge/Pinia-2.1.7-FFD859?style=flat&logo=pinia)
 
-## ✨ Features
+## 📋 Inhaltsverzeichnis
 
-### 🏗️ **Technologie-Stack**
-- **Vue 3** mit Composition API und `<script setup>`
-- **TypeScript** für vollständige Typsicherheit
-- **Vite** als Build-Tool für schnelle Entwicklung
-- **Pinia** für modernes State Management
-- **Vue Router** mit deutschen URLs
-- **Firebase** für Backend und Hosting
+- [Entwicklungs-Setup](#-entwicklungs-setup)
+- [Systemvoraussetzungen](#-systemvoraussetzungen)
+- [Installation](#-installation)
+- [Build-Anweisungen](#-build-anweisungen)
+- [Entwicklung](#-entwicklung)
+- [Projektstruktur](#-projektstruktur)
+- [Verfügbare Scripts](#-verfügbare-scripts)
+- [Deployment](#-deployment)
+- [Technologie-Stack](#-technologie-stack)
 
-### 🎨 **Design & UX**
-- **Responsive Design** - Optimiert für Desktop, Tablet und Mobile
-- **Eigenes Design-System** - Kein externes UI-Framework
-- **Accessibility** - WCAG-konforme Implementierung
-- **Smooth Animations** - Moderne Micro-Interactions
-- **Progressive Enhancement** - Funktioniert auch ohne JavaScript
+## 🛠️ Entwicklungs-Setup
 
-### 📱 **Funktionalitäten**
-- **Startseite** mit Hero-Section und schneller Navigation
-- **Termine** - Events mit Filter- und Sortieroptionen
-- **Neues im Verein** - News-System mit Paginierung
-- **Galerie** - Bildergalerie mit Lightbox-Funktion
-- **Mitglied werden** - Anmeldeformular mit Validierung
-- **Responsive Navigation** - Sidebar (Desktop) / Drawer (Mobile)
+### 📋 Systemvoraussetzungen
 
-## 🚀 Schnellstart
+Bevor Sie mit der Entwicklung beginnen, stellen Sie sicher, dass folgende systemweite Abhängigkeiten installiert sind:
 
-### 📋 **Voraussetzungen**
-- **Node.js** (Version 18+ empfohlen)
-- **npm** oder **yarn**
-- Moderne Browser (Chrome 90+, Firefox 88+, Safari 14+)
+#### **Erforderliche Software:**
 
-### ⚡ **Installation & Start**
+1. **Node.js** (Version 18.x oder höher)
+   ```bash
+   # Überprüfen der installierten Version
+   node --version
+   
+   # Download und Installation:
+   # macOS: https://nodejs.org/en/download/ oder via Homebrew:
+   brew install node
+   
+   # Windows: https://nodejs.org/en/download/
+   # Linux (Ubuntu/Debian):
+   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+   sudo apt-get install -y nodejs
+   ```
+
+2. **npm** (wird automatisch mit Node.js installiert)
+   ```bash
+   # Überprüfen der npm Version
+   npm --version
+   
+   # Auf neueste Version aktualisieren
+   npm install -g npm@latest
+   ```
+
+3. **Git** (für Versionskontrolle)
+   ```bash
+   # Installation überprüfen
+   git --version
+   
+   # macOS: git ist vorinstalliert oder via Xcode Command Line Tools
+   xcode-select --install
+   
+   # Windows: https://git-scm.com/download/win
+   # Linux: sudo apt-get install git
+   ```
+
+## 📦 Installation
+
+### 1. Repository klonen
 
 ```bash
-# 1. Repository klonen
-git clone <repository-url>
+# HTTPS
+git clone https://github.com/your-username/AlumniWebsite.git
 cd AlumniWebsite
 
-# 2. Dependencies installieren
-npm install
-
-# 3. Development Server starten
-npm run dev
-
-# 4. Browser öffnen: http://localhost:5173
+# oder SSH (wenn SSH-Keys konfiguriert sind)
+git clone git@github.com:your-username/AlumniWebsite.git
+cd AlumniWebsite
 ```
 
-### 🔧 **Konfiguration**
+### 2. Lokale Abhängigkeiten installieren
 
-#### **Setup:**
 ```bash
-# env.template zu .env kopieren
+# Alle Dependencies aus package.json installieren
+npm i
+```
+
+**Was wird installiert:**
+
+**Dependencies (Laufzeit):**
+- `vue@^3.5.18` - Vue.js Framework
+- `vue-router@^4.2.5` - Client-side Routing
+- `pinia@^2.1.7` - State Management
+- `firebase@^12.2.1` - Backend-as-a-Service
+- `@heroicons/vue@^2.2.0` - Icon-Bibliothek
+
+**DevDependencies (Entwicklung):**
+- `vite@^7.1.2` - Build-Tool und Dev-Server
+- `typescript@~5.8.3` - TypeScript Compiler
+- `vue-tsc@^3.0.5` - Vue TypeScript Compiler
+- `@vitejs/plugin-vue@^6.0.1` - Vue Plugin für Vite
+- `tsx@^4.20.5` - TypeScript Script Runner
+- `ssh2-sftp-client` - Zum Deployn auf WebServer
+- Weitere Tools für Linting, Testing und Deployment
+
+### 3. Firebase Projekt erstellen
+
+https://console.firebase.google.com/
+
+- Projekt erstellen
+- Firestore Database erstellen
+- Storage Bucket erstellen
+- Authentication aktivieren (Email/Password)
+
+### 4. Firebase Security Rules konfigurieren
+
+#### **Firestore Rules**
+Navigieren Sie zu **Firestore Database > Rules** und ersetzen Sie die Standard-Rules mit:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Admin-Benutzer Verwaltung
+    match /admins/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if isAdmin();
+    }
+    
+    // Admins dürfen alles
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+    
+    // SENSITIVE COLLECTION - Benutzerdaten
+    match /users/{id} {
+      allow read, write: if true; // TEMPORÄR FÜR DEV
+      allow read: if request.auth.uid == id || isAdmin();
+      allow write: if request.auth.uid == id || isAdmin();
+      allow create: if true;
+    }
+    
+    // Events (nur lesen für alle, schreiben nur für Admins)
+    match /events/{document} {
+      allow read: if true;
+      allow write: if false; 
+    }
+    
+    // News (nur lesen für alle, schreiben nur für Admins)
+    match /news/{document} {
+      allow read: if true;
+      allow write: if false; 
+    }
+    
+    // Galerie (nur lesen für alle, schreiben nur für Admins)
+    match /gallery/{document} {
+      allow read: if true;
+      allow write: if false; 
+    }
+    
+    // Galerie-Ordner (nur lesen für alle, schreiben nur für Admins)
+    match /gallery_folders/{document} {
+      allow read: if true;
+      allow write: if false;
+    }
+    
+    // Hilfsfunktionen
+    function isAdmin() {
+      return request.auth != null && 
+             exists(/databases/$(database)/documents/admins/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true;
+    }
+  }
+}
+```
+
+#### **Storage Rules**
+Navigieren Sie zu **Storage > Rules** und ersetzen Sie die Standard-Rules mit:
+
+```javascript
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+  }
+}
+```
+
+**⚠️ Wichtige Sicherheitshinweise:**
+- Die `users` Collection hat temporär `allow read, write: if true;` für Development
+- **Vor Production-Deployment** müssen die Rules verschärft werden
+- Admins werden über die `admins` Collection verwaltet
+- Alle öffentlichen Inhalte (Events, News, Galerie) sind nur lesbar
+
+### 5. Umgebungsvariablen konfigurieren
+
+```bash
+# .env Datei aus Template erstellen
 cp env.template .env
 
-# Firebase-Konfiguration eintragen
-# VITE_FIREBASE_API_KEY=your_api_key_here
-# VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-# VITE_FIREBASE_PROJECT_ID=your_project_id
-# VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-# VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
-# VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
+# .env Datei bearbeiten und Firebase-Konfiguration eintragen
+# Erforderliche Variablen:
+VITE_FIREBASE_API_KEY=your_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
+
+#Version
+VITE_VERSION="v.0.5"
+VITE_LAST_UPDATED_WEBSITE="20. September 2025"
+VITE_LAST_UPDATED_BARRIEREFREI="20. September 2025" 
+
+
+#NUR FÜR DAS DEPLOY SCRIPT
+
+#Deploy auf Preview-Webspace
+PREVIEW_SFTP_HOST="xxx"
+PREVIEW_SFTP_USERNAME="xxx"
+PREVIEW_SFTP_KEY="xxx"
+
 ```
 
-### 🏗️ **Build-Kommandos**
+### 6. Firebase Cloud Functions Integrieren (Optional)
 
+Anleitung
+
+https://github.com/tom00408/alumni-cloud-functions
+
+## 🔨 Build-Anweisungen
+
+### Development Build
 ```bash
-# Development Server
+# Entwicklungsserver starten (mit Hot Module Replacement)
 npm run dev
 
-# Production Build
+# Alternative mit spezifischem Port
+npm run dev -- --port 3000
+```
+
+### Production Build
+```bash
+# Optimierten Production Build erstellen
 npm run build
 
-# Build Preview
-npm run preview
-
-# Type Check
-npm run type-check
+# Build-Output wird in /dist Ordner erstellt
+# Zusätzlich wird .htaccess für Apache-Server kopiert
 ```
+
+### Type Checking
+```bash
+# TypeScript-Typen überprüfen ohne Build
+npm run check:types
+```
+
+### Preview Build
+```bash
+# Production Build lokal testen
+npm run preview
+```
+
+## 🚀 Entwicklung
+
+### Entwicklungsserver starten
+
+```bash
+# Standard-Entwicklungsserver (Port 5173)
+npm run dev
+
+# Server läuft auf: http://localhost:5173
+# Hot Module Replacement (HMR) ist aktiviert
+# Änderungen werden automatisch im Browser aktualisiert
+```
+
+**Entwicklungsfeatures:**
+- ⚡ Vite Dev Server mit HMR
+- 🔧 TypeScript-Unterstützung
+- 🎨 CSS Hot Reload
+- 🐛 Source Maps für Debugging
+- 📱 Responsive Design Testing
+
+### Entwicklungsworkflow
+
+1. **Lokale Entwicklung:**
+   ```bash
+   npm run dev
+   ```
+
+2. **Typen überprüfen:**
+   ```bash
+   npm run check:types
+   ```
+
+3. **Build testen:**
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+4. **Deployment Preview:**
+   ```bash
+   npm run deploy:preview
+    ```
 
 ## 📁 Projektstruktur
 
 ```
 AlumniWebsite/
-├── 📂 public/                  # Statische Assets
-│   └── vite.svg
-├── 📂 src/
-│   ├── 📂 components/          # 🧩 Wiederverwendbare UI-Komponenten
-│   │   ├── AppSidebar.vue      # 🧭 Haupt-Navigation (Desktop/Mobile)
-│   │   ├── AppHeader.vue       # 📱 Mobile Header mit Hamburger-Menü
-│   │   ├── HgCard.vue          # 🃏 Basis Card-Komponente
-│   │   ├── EventItem.vue       # 📅 Event-Darstellung
-│   │   └── NewsCard.vue        # 📰 News-Artikel-Card
-│   ├── 📂 layouts/             # 🏗️ Layout-Templates
-│   │   └── DefaultLayout.vue   # Standard-Layout mit Sidebar
-│   ├── 📂 pages/               # 📄 Seiten-Komponenten (Routes)
-│   │   ├── Startseite.vue      # 🏠 Homepage mit Hero-Section
-│   │   ├── Termine.vue         # 📅 Events mit Filter/Suche
-│   │   ├── News.vue            # 📰 News-Übersicht
-│   │   ├── Galerie.vue         # 🖼️ Bildergalerie mit Lightbox
-│   │   ├── MitgliedWerden.vue  # ➕ Mitgliedschaftsformular
-│   │   ├── Impressum.vue       # ℹ️ Rechtliche Informationen
-│   │   └── NotFound.vue        # ❌ 404-Fehlerseite
-│   ├── 📂 stores/              # 🏪 Pinia State Management
-│   │   ├── events.ts           # Events-Store (CRUD + Filter)
-│   │   ├── news.ts             # News-Store (Artikel + Paginierung)
-│   │   └── gallery.ts          # Gallery-Store (Bilder + Upload)
-│   ├── 📂 services/            # 🔧 Backend-Services
-│   │   ├── events.ts           # Firebase Events-CRUD
-│   │   ├── news.ts             # Firebase News-CRUD
-│   │   ├── gallery.ts          # Firebase Storage + Firestore
-│   │   └── membership.ts       # Mitgliedschaftsanträge
-│   ├── 📂 lib/                 # 🛠️ Utilities & Konfiguration
-│   │   ├── firebase.ts         # Firebase SDK Setup
-│   │   ├── types.ts            # TypeScript Interface-Definitionen
-│   ├── 📂 styles/              # 🎨 Design-System
-│   │   └── theme.css           # CSS Custom Properties & Utilities
-│   ├── 📂 router/              # 🛣️ Vue Router Konfiguration
-│   │   └── index.ts            # Route-Definitionen
-│   ├── main.ts                 # 🚀 App Entry Point
-│   ├── App.vue                 # 📱 Root-Komponente
-│   └── style.css               # 🎨 Globale Styles
-├── 📋 package.json             # Dependencies & Scripts
-├── 🔧 vite.config.ts           # Vite-Konfiguration
-├── 📝 tsconfig.json            # TypeScript-Konfiguration
-├── 🔒 env.template             # Umgebungsvariablen-Template
-└── 📖 README.md                # Diese Datei
+├── public/                 # Statische Assets
+│   ├── images/            # Bilder und Icons
+│   └── index.html         # HTML Template
+├── src/                   # Quellcode
+│   ├── components/        # Vue Komponenten
+│   │   ├── AppHeader.vue
+│   │   ├── AppSidebar.vue
+│   │   └── ...
+│   ├── layouts/           # Layout-Komponenten
+│   │   └── DefaultLayout.vue
+│   ├── pages/             # Seiten-Komponenten
+│   │   ├── Startseite.vue
+│   │   ├── Termine.vue
+│   │   └── ...
+│   ├── services/          # API Services
+│   │   ├── auth.ts
+│   │   ├── events.ts
+│   │   └── ...
+│   ├── stores/            # Pinia Stores
+│   │   ├── auth.ts
+│   │   └── ...
+│   ├── styles/            # Globale Styles
+│   │   ├── style.css
+│   │   └── theme.css
+│   ├── lib/               # Utilities und Types
+│   │   ├── firebase.ts
+│   │   └── types.ts
+│   ├── router/            # Vue Router Konfiguration
+│   │   └── index.ts
+│   ├── App.vue           # Root Komponente
+│   └── main.ts           # Entry Point
+├── scripts/               # Build und Deployment Scripts
+├── dist/                  # Build Output (nach npm run build)
+├── .env.template         # Umgebungsvariablen Template
+├── package.json          # Dependencies und Scripts
+├── tsconfig.json         # TypeScript Konfiguration
+├── vite.config.ts        # Vite Konfiguration
+└── README.md             # Diese Datei
 ```
 
-## 🎨 Design-System
+## 📜 Verfügbare Scripts
 
-### 🌈 **Farbpalette**
-```css
-/* Hainberg-Gymnasium Markenfarben */
---color-primary: #5362FE     /* Hauptfarbe (Links, Buttons) */
---color-secondary: #07488F   /* Sidebar, Headlines */
---color-accent: #486DB9      /* Hover-States, Highlights */
---color-info: #0662BE        /* Info-Elemente */
---color-bg: #AEB7FB          /* Hintergrund-Gradient */
---color-text: #454443        /* Haupttext */
-```
-
-### 📐 **Layout-System**
-- **CSS Grid & Flexbox** für moderne Layouts
-- **Custom Properties** für konsistente Abstände
-- **Mobile-First** Responsive Design
-- **Fluid Typography** mit clamp()
-
-### 📱 **Responsive Breakpoints**
-- **Mobile**: `< 768px` (Hamburger-Menü)
-- **Tablet**: `768px - 1023px` (Collapsible Sidebar)
-- **Desktop**: `≥ 1024px` (Persistente Sidebar)
-
-### ♿ **Accessibility Features**
-- **WCAG 2.1 AA** konform
-- **Keyboard Navigation** vollständig unterstützt
-- **Screen Reader** optimiert
-- **Focus Management** für SPA-Navigation
-- **High Contrast** Support
-
-## 🔥 Firebase Backend
-
-### 📊 **Firestore Collections**
-```typescript
-// 📅 Events Collection
-interface Event {
-  id: string
-  title: string
-  date: Timestamp
-  location?: string
-  description?: string
-  isFeatured?: boolean
-  createdAt: Timestamp
-}
-
-// 📰 News Collection  
-interface NewsArticle {
-  id: string
-  title: string
-  slug: string
-  date: Timestamp
-  excerpt: string
-  content: string
-  coverUrl?: string
-  tags?: string[]
-  createdAt: Timestamp
-}
-
-// 🖼️ Gallery Collection
-interface GalleryImage {
-  id: string
-  title?: string
-  imageUrl: string
-  thumbnailUrl?: string
-  createdAt: Timestamp
-}
-
-// ➕ Membership Applications
-interface MembershipApplication {
-  id: string
-  name: string
-  email: string
-  graduationYear?: number
-  relation?: string
-  message?: string
-  status: 'pending' | 'approved' | 'rejected'
-  createdAt: Timestamp
-}
-```
-
-### 🗂️ **Storage Structure**
-```
-📁 Firebase Storage
-└── 📁 gallery/
-    ├── 📁 original/        # Hochauflösende Original-Bilder
-    ├── 📁 thumbnails/      # Optimierte Thumbnail-Versionen
-    └── 📁 compressed/      # Web-optimierte Versionen
-```
-
-### 🔒 **Security Rules**
-```javascript
-// Firestore Security Rules
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Öffentlicher Lesezugriff
-    match /{collection}/{document} {
-      allow read: if collection in ['events', 'news', 'gallery'];
-    }
-    
-    // Mitgliedschaftsanträge (nur erstellen)
-    match /membershipApplications/{document} {
-      allow create: if isValidApplication();
-    }
-  }
-}
-
-// Storage Security Rules
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /gallery/{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null; // Nur für Admins
-    }
-  }
-}
-```
-
-## 🛠️ Development Guide
-
-
-### 🧩 **Neue Komponenten erstellen**
 ```bash
-# 1. Komponente erstellen
-touch src/components/MyComponent.vue
+# Entwicklung
+npm run dev              # Entwicklungsserver starten
+npm run build            # Production Build erstellen
+npm run preview          # Build lokal testen
 
-# 2. TypeScript + Composition API verwenden
-# 3. CSS Custom Properties nutzen  
-# 4. Props/Emits typisieren
-```
+# Code-Qualität
+npm run check:types      # TypeScript Typen prüfen
+npm run check:css        # CSS Analyse
+npm run check:file-sizes # Bundle-Größe analysieren
 
-### 📄 **Neue Seiten hinzufügen**
-```typescript
-// 1. Seite erstellen: src/pages/NeueSeite.vue
-// 2. Route registrieren: src/router/index.ts
-{
-  path: '/neue-seite',
-  name: 'neue-seite', 
-  component: () => import('../pages/NeueSeite.vue'),
-  meta: { title: 'Neue Seite' }
-}
+# Testing
+npm run test:mem-app     # Mitgliedschaftsantrag testen
+#Funktioniert nur wenn die Firebase Rules entsprechend angepasst sind
 
-// 3. Navigation erweitern: src/components/AppSidebar.vue
-```
 
-### 🏪 **Store hinzufügen**
-```typescript
-// src/stores/myStore.ts
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-
-export const useMyStore = defineStore('myStore', () => {
-  // State
-  const data = ref([])
-  const loading = ref(false)
-  
-  // Getters  
-  const filteredData = computed(() => data.value.filter(...))
-  
-  // Actions
-  const fetchData = async () => { /* ... */ }
-  
-  return { data, loading, filteredData, fetchData }
-})
+# Deployment
+npm run deploy:preview   # Preview-Deployment
+npm run deploy:main      # Production-Deployment (noch nicht konfiguriert)
 ```
 
 ## 🚀 Deployment
 
-### 📦 **Production Build**
+### Preview-Deployment
 ```bash
-# Build für Production
+# Automatisches Deployment auf Preview-Server
+npm run deploy:preview
+```
+
+### Production-Deployment
+```bash
+# Production Build erstellen
 npm run build
 
-# Preview des Builds
-npm run preview
-
-# Type-Checking
-npm run type-check
+# Build-Ordner (/dist) auf Server hochladen
+# Enthält alle optimierten Assets und .htaccess für Apache
 ```
 
-### 🌐 **Firebase Hosting**
+## 🛠️ Technologie-Stack
+
+### **Frontend**
+- **Vue.js 3** - Progressive JavaScript Framework
+- **TypeScript** - Typisierte JavaScript-Superset
+- **Vue Router** - Client-side Routing
+- **Pinia** - State Management Store
+
+### **Build & Development**
+- **Vite** - Next-generation Frontend Build Tool
+- **PostCSS** - CSS-Transformationen
+- **ESLint** - Code-Linting
+- **Prettier** - Code-Formatierung
+
+### **Backend & Services**
+- **Firebase Auth** - Benutzerauthentifizierung
+- **Firestore** - NoSQL-Datenbank
+- **Firebase Storage** - Datei-Upload
+- **Firebase Hosting** - Static Site Hosting
+
+### **Styling**
+- **CSS Custom Properties** - Eigenes Design-System
+- **CSS Grid & Flexbox** - Moderne Layouts
+- **Responsive Design** - Mobile-first Ansatz
+
+## 🔧 Entwicklungshinweise
+
+### **Code-Standards:**
+- TypeScript für alle neuen Dateien
+- Vue 3 Composition API mit `<script setup>`
+- Pinia für State Management
+- Semantisches HTML für Barrierefreiheit
+
+### **Naming Conventions:**
+- Komponenten: PascalCase (`AppHeader.vue`)
+- Variablen/Funktionen: camelCase (`getUserData`)
+- CSS-Klassen: kebab-case (`nav-item`)
+- Konstanten: UPPER_SNAKE_CASE (`API_BASE_URL`)
+
+### **Git Workflow:**
 ```bash
-# Firebase CLI installieren
-npm install -g firebase-tools
+# Feature Branch erstellen
+git checkout -b feature/neue-funktion
 
-# Login und Projekt initialisieren  
-firebase login
-firebase init hosting
+# Änderungen committen
+git add .
+git commit -m "feat: neue Funktion hinzugefügt"
 
-# Deployment
-npm run build
-firebase deploy
+# Branch pushen
+git push origin feature/neue-funktion
+
+# Pull Request erstellen
 ```
 
-### 🐳 **Docker (Optional)**
-```dockerfile
-# Dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-EXPOSE 5173
-CMD ["npm", "run", "preview", "--", "--host"]
-```
+## 🐛 Troubleshooting
 
-## 🔮 Roadmap & Features
+### **Häufige Probleme:**
 
-### ✅ **Implementiert**
-- [x] **Responsive Design** (Desktop/Tablet/Mobile)
-- [x] **Pinia State Management** mit TypeScript
-- [x] **Firebase Integration** (Firestore + Storage)
-- [x] **Vue Router** mit deutschen URLs
-- [x] **Accessibility** (WCAG 2.1 AA)
-- [x] **Form Validation** im Mitgliedsformular
+1. **Port bereits in Verwendung:**
+   ```bash
+   # Anderen Port verwenden
+   npm run dev -- --port 3000
+   ```
 
-### 🔄 **In Arbeit**
-- [ ] **Admin-Dashboard** für Content-Management
-- [ ] **User Authentication** (Google/Email)
-- [ ] **Event-Detail-Seiten** mit RSVP
-- [ ] **Newsletter-System** mit E-Mail-Templates
+2. **Node-Module Probleme:**
+   ```bash
+   # Node-Modules neu installieren
+   rm -rf node_modules package-lock.json
+   npm install
+   ```
 
-### 🎯 **Geplant**
-- [ ] **Progressive Web App** (PWA) Features
-- [ ] **Push-Benachrichtigungen** für Events
-- [ ] **Erweiterte Suche** mit Elasticsearch
-- [ ] **SEO-Optimierung** mit Nuxt/SSR
-- [ ] **Multi-Language** Support (EN/DE)
-- [ ] **Dark Mode** Theme
-- [ ] **Analytics Dashboard** für Admins
+3. **TypeScript Fehler:**
+   ```bash
+   # Typen überprüfen
+   npm run check:types
+   ```
 
-## 🤝 Contributing
-
-1. Fork das Repository
-2. Erstellen Sie einen Feature-Branch (`git checkout -b feature/neues-feature`)
-3. Committen Sie Ihre Änderungen (`git commit -am 'Neues Feature hinzugefügt'`)
-4. Pushen Sie den Branch (`git push origin feature/neues-feature`)
-5. Erstellen Sie einen Pull Request
-
-## 📄 Lizenz
-
-© 2024 Alumni-Verein des Hainberg-Gymnasiums. Alle Rechte vorbehalten.
+4. **Build-Fehler:**
+   ```bash
+   # Cache leeren und neu builden
+   rm -rf dist
+   npm run build
+   ```
 
 ## 📞 Support
 
-Bei Fragen oder Problemen wenden Sie sich an:
-- E-Mail: info@hg-alumni.de
-- GitHub Issues für technische Probleme
+Bei Fragen oder Problemen:
+- **E-Mail:** tom00408@aol.com
+- **Entwickler-Team:** HG Alumni IT-Team
+

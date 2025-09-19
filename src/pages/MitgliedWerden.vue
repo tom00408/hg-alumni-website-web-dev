@@ -498,7 +498,6 @@
 import { ref, reactive } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import HgCard from '../components/HgCard.vue';
-// import type { MembershipApplication } from '../lib/types'
 
 const authStore = useAuthStore();
 const submitting = ref(false);
@@ -522,8 +521,6 @@ const form = reactive({
 	placeDate: '',
 	signature: '',
 	consent: false,
-	// Account-Erstellung (Pflicht)
-	createAccount: true,  // Immer true, nicht mehr änderbar
 	password: '',
 	confirmPassword: '',
 });
