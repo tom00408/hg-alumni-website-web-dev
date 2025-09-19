@@ -4,14 +4,14 @@ import {
   getDoc, 
   Timestamp 
 } from 'firebase/firestore'
-import { httpsCallable } from 'firebase/functions'
+import { httpsCallable, getFunctions } from 'firebase/functions'
 import { db, functions, auth } from '../lib/firebase'
-import type { User, MembershipApplication } from '../lib/types'
+import type { User, MembershipApplication, SubmitEmailData } from '../lib/types'
 
 const COLLECTION_NAME = 'users'
 
 /**
- * Vollständigen Mitgliedsantrag für einen bestehenden User erstellen/aktualisieren
+ * Mitgliedsantrag für einen User erstellen
  */
 export const submitMembershipApplication = async (
   uid: string,
@@ -114,29 +114,28 @@ export const updateUser = async (uid: string, updates: Partial<User>): Promise<v
  * E-Mail-Benachrichtigung für neue Anträge senden
  */
 const sendApplicationNotification = async (user: User): Promise<void> => {
-  try {
-    console.log('Sending notification for new membership application:', user.uid)
-    
-    // Firebase Function aufrufen
-    const sendConfirmationEmail = httpsCallable(functions, 'sendConfirmationEmail')
-    
-    // User-Objekt übergeben (kompatibel mit altem MembershipApplication Format)
-    const result = await sendConfirmationEmail({
-      application: {
-        id: user.uid,
-        ...user,
-        userId: user.uid,
-        createdAt: user.applicationCreatedAt || user.createdAt,
-        status: user.applicationStatus
-      }
-    })
-    
-    console.log('Confirmation email sent successfully:', result.data)
-    
-  } catch (error) {
-    console.error('Error sending notification:', error)
-    // Fehler beim E-Mail-Versand sollten die Antragsstellung nicht blockieren
+
+  const data: SubmitEmailData = {
+    salutation: user.salutation,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    address: user.address,
+    postalCode: user.postalCode,
+    city: user.city,
+    birthDate: user.birthDate
   }
+
+  const eingangsBestaetigung = httpsCallable(functions, "eingangsBestaetigung");
+
+  try {
+    const result = await eingangsBestaetigung({ submitEmailData: data });
+    console.log("✅✅✅✅✅✅Mail gesendet:", result.data);
+  } catch (err) {
+    console.error("❌❌❌❌❌❌Fehler beim Senden:", err);
+    throw err;
+  }
+
 }
 
 /**

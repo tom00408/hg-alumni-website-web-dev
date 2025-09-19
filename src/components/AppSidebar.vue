@@ -79,7 +79,6 @@
 
     <!-- Footer -->
     <div class="sidebar__footer">
-      <p class="footer-text">© 2024 HG Alumni</p>
       <p class="footer-text">{{ version }}</p>
     </div>
   </aside>

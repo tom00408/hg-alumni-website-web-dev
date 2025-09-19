@@ -197,20 +197,35 @@ service firebase.storage {
 - Admins werden über die `admins` Collection verwaltet
 - Alle öffentlichen Inhalte (Events, News, Galerie) sind nur lesbar
 
-### 5. Umgebungsvariablen konfigurieren
+### 5. Umgebungsvariablen konfigurieren & Firebase config
+
+#### firebase.ts
+
+```bash
+# src/lib/firebase.ts
+cd src/lib/
+cp firebase-example.ts firebase.ts
+```
+
+```js
+//Anpassen
+const firebaseConfig = {
+  apiKey: "apiKey",
+  authDomain: "authDomain",
+  projectId: "projectId",
+  storageBucket: "storageBucket",
+  messagingSenderId: "messagingSenderId",
+  appId: "appId"
+}
+````
+
+#### .env
+
 
 ```bash
 # .env Datei aus Template erstellen
 cp env.template .env
 
-# .env Datei bearbeiten und Firebase-Konfiguration eintragen
-# Erforderliche Variablen:
-VITE_FIREBASE_API_KEY=your_api_key_here
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
-VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
 
 #Version
 VITE_VERSION="v.0.5"
