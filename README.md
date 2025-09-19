@@ -229,9 +229,15 @@ PREVIEW_SFTP_KEY="xxx"
 
 ### 6. Firebase Cloud Functions Integrieren (Optional)
 
-Anleitung
+#### Anleitung:
 
 https://github.com/tom00408/alumni-cloud-functions
+
+### 7. Admin Seite erstellen für Verwaltung (Optional aber sehr empfehlenswert)
+
+#### Anleitung
+
+https://github.com/tom00408/hg-alumni-admin-website
 
 ## 🔨 Build-Anweisungen
 
