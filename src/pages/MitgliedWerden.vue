@@ -532,7 +532,7 @@ const benefits = [
 		id: 1,
 		title: 'Netzwerk',
 		description:
-			'Vernetzen Sie sich mit anderen Alumni und erweitern Sie Ihr berufliches Netzwerk',
+			'Vernetzt euch mit anderen Alumni und erweitert euer berufliches Netzwerk',
 		icon: `<svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
       <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.004 3.004 0 0 0 17.07 7c-.8 0-1.54.46-1.88 1.18L12.5 12 9.81 8.18A2.996 2.996 0 0 0 7.93 7c-1.24 0-2.38.77-2.82 1.93L2.5 16H5v6h2v-6h1.5l2.28-5.71 2.1 3.21c.37.56 1.01.9 1.68.9s1.31-.34 1.68-.9L18.5 10H20v12h-2z"/>
     </svg>`,
@@ -550,7 +550,7 @@ const benefits = [
 		id: 4,
 		title: 'Unterstützung',
 		description:
-			'Helfen Sie dabei, die Zukunft der Schule und der Schüler zu gestalten',
+			'Helft dabei, die Zukunft der Schule und der Schüler:innen zu gestalten',
 		icon: `<svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
     </svg>`,

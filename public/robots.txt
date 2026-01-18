@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /profil
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://alumni-hg.de/sitemap.xml
+

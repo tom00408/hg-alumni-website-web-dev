@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Startseite - HG Alumni -->
+  <url>
+    <loc>https://alumni-hg.de/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2024-01-01</lastmod>
+  </url>
+  
+  <!-- Termine - HG Alumni -->
+  <url>
+    <loc>https://alumni-hg.de/termine</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2024-01-01</lastmod>
+  </url>
+  
+  <!-- News - HG Alumni -->
+  <url>
+    <loc>https://alumni-hg.de/news</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2024-01-01</lastmod>
+  </url>
+  
+  <!-- Galerie - HG Alumni -->
+  <url>
+    <loc>https://alumni-hg.de/galerie</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2024-01-01</lastmod>
+  </url>
+  
+  <!-- Mitglied werden - HG Alumni -->
+  <url>
+    <loc>https://alumni-hg.de/mitglied-werden</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2024-01-01</lastmod>
+  </url>
+  
+  <!-- Satzung -->
+  <url>
+    <loc>https://alumni-hg.de/satzung</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <!-- Impressum -->
+  <url>
+    <loc>https://alumni-hg.de/impressum</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <!-- Datenschutz -->
+  <url>
+    <loc>https://alumni-hg.de/datenschutz</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+</urlset>
+

@@ -9,7 +9,7 @@
     "postbuild": "cp .htaccess dist/.htaccess",
     "preview": "vite preview",
     "deploy:preview": "tsx scripts/deployPreview.ts",
-    "deploy:main": "echo 'du bist noch nicht so weit'",
+    "deploy:main": "tsx scripts/deployReal.ts",
     "check:types": "vue-tsc -b",
     "check:file-sizes": "tsx scripts/check-file-sizes.ts",
     "check:css": "tsx scripts/check-css.ts",
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
+    "@vueuse/head": "^2.0.0",
     "firebase": "^12.2.1",
     "pinia": "^2.1.7",
     "vue": "^3.5.18",

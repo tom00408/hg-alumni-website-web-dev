@@ -38,8 +38,10 @@
             <div class="contact-info">
               <p><strong>1. Vorsitzende:</strong> Steffen Tiedtke</p>
               <p><strong>2. Vorsitzender:</strong> Georg Bartelt</p>
-              <p><strong>Schatzmeister:</strong> NOCH AUSFÜLLEN</p>
-              <p><strong>Schriftführerin:</strong> NOCH AUSFÜLLEN</p>
+              <p><strong>Schatzmeister:</strong> Steffen Tiedtke (kommisarisch)</p>
+              <p><strong>Schriftführerin:</strong> Sophie Wüstefeld</p>
+              <p><strong>Öffentlichkeitsarbeit und Mitgliederbetreuung:</strong> Tom Tiedtke</p>
+
             </div>
           </section>
 

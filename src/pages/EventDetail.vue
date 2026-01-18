@@ -96,9 +96,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useEventsStore } from '../stores/events'
+import { useSEO } from '../composables/useSEO'
 import HgCard from '../components/HgCard.vue'
 import type { Event } from '../lib/types'
 
@@ -159,6 +160,21 @@ const shareEvent = async () => {
     }
   }
 }
+
+// SEO Meta-Tags setzen wenn Event geladen ist
+watch(event, (newEvent) => {
+  if (newEvent) {
+    const siteUrl = import.meta.env.VITE_SITE_URL || 'https://alumni-hg.de'
+    
+    useSEO({
+      title: `${newEvent.title} - Termine`,
+      description: `Event am ${formatDate(newEvent.date)}${newEvent.location ? ` in ${newEvent.location}` : ''}. ${newEvent.description || ''}`.trim(),
+      url: `${siteUrl}/termine/${newEvent.id}`,
+      type: 'event',
+      keywords: ['Event', 'Termin', 'Veranstaltung', 'Hainberg-Gymnasium', newEvent.location].filter(Boolean) as string[]
+    })
+  }
+}, { immediate: true })
 
 onMounted(async () => {
   const eventId = route.params.id as string

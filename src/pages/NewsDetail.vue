@@ -110,9 +110,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useNewsStore } from '../stores/news'
+import { useSEO } from '../composables/useSEO'
 import HgCard from '../components/HgCard.vue'
 import NewsCard from '../components/NewsCard.vue'
 import type { NewsArticle } from '../lib/types'
@@ -198,6 +199,26 @@ const shareArticle = async () => {
     }
   }
 }
+
+// SEO Meta-Tags setzen wenn Artikel geladen ist
+watch(article, (newArticle) => {
+  if (newArticle) {
+    const siteUrl = import.meta.env.VITE_SITE_URL || 'https://alumni-hg.de'
+    const publishedTime = newArticle.date?.toDate?.()?.toISOString() || 
+                          (newArticle.date instanceof Date ? newArticle.date.toISOString() : undefined)
+    
+    useSEO({
+      title: newArticle.title,
+      description: newArticle.excerpt,
+      image: newArticle.coverUrl || '/images/hglogo.png',
+      url: `${siteUrl}/news/${newArticle.slug}`,
+      type: 'article',
+      keywords: newArticle.tags,
+      publishedTime: publishedTime,
+      modifiedTime: newArticle.createdAt?.toDate?.()?.toISOString() || publishedTime
+    })
+  }
+}, { immediate: true })
 
 onMounted(async () => {
   const slug = route.params.slug as string

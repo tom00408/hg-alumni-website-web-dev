@@ -5,7 +5,7 @@
       <div class="hero__background">
         <img 
           src="/images/innenhof.jpg" 
-          alt="Hainberg-Gymnasium Gebäude" 
+          alt="Hainberg Gymnasium Göttingen - HG Alumni Verein" 
           class="hero__background-image"
         />
         <div class="hero__overlay"></div>
@@ -17,10 +17,10 @@
               <span class="logo-text">HG</span>
             </div>
           </div>
-          <h1 class="hero__title">Alumni-Verein des Hainberg-Gymnasiums</h1>
+          <h1 class="hero__title">HG Alumni - Alumni-Verein des Hainberg-Gymnasiums</h1>
           <p class="hero__subtitle">
-            Willkommen in unserer Gemeinschaft ehemaliger Schüler:innen und Lehrer:innen. 
-            Bleiben Sie mit Ihrer Schule, Ihren Mitschüler:innen und Kolleg:innen in Verbindung.
+            Willkommen beim HG Alumni Verein - der Gemeinschaft ehemaliger Schüler:innen und Lehrer:innen des Hainberg Gymnasiums Göttingen. 
+            Bleibt mit eurer Schule, euren Mitschüler:innen und Kolleg:innen in Verbindung.
           </p> 
           <div class="hero__actions">
             <router-link to="/mitglied-werden" class="btn-secondary btn-large">
@@ -44,7 +44,7 @@
           
           <div class="about-text">
             <p>
-              „Bildung, Kunst und Kultur zum Wohle des Hainberg-Gymnasiums" zu fördern benennt der 2014 gegründete „Alumni-Verein" des HG als ein Hauptziel seiner Arbeit. Zudem unterstützt der Verein die Mitglieder der Schule bei der beruflichen Orientierung der Schüler:innen der Oberstufe.
+              „Bildung, Kunst und Kultur zum Wohle des Hainberg-Gymnasiums" zu fördern benennt der 2014 gegründete „Alumni-Verein" des Hainberg Gymnasiums (HG) als ein Hauptziel seiner Arbeit. Der HG Alumni Verein unterstützt die Mitglieder der Schule bei der beruflichen Orientierung der Schüler:innen der Oberstufe.
             </p>
             
             <p>
@@ -66,7 +66,7 @@
             </div>
             
             <p class="board-info">
-              <em>Der Vorstand vom Alumni-Verein</em>
+              <em>Der Vorstand des Alumni-Vereins</em>
             </p>
           </div>
         </div>
@@ -128,10 +128,10 @@
     <section class="cta-section">
       <HgCard variant="accent" class="cta-card">
         <div class="cta-content">
-          <h2 class="cta-title">Werden Sie Teil unserer Gemeinschaft</h2>
+          <h2 class="cta-title">Werdet Teil unserer Gemeinschaft</h2>
           <p class="cta-description">
-            Vernetzen Sie sich mit anderen Alumni, bleiben Sie über Schulereignisse informiert 
-            und unterstützen Sie die nächste Generation von Schülern.
+            Vernetzt euch mit anderen Alumni, bleibt über Schulereignisse informiert 
+            und unterstützt die nächste Generation von Schülern.
           </p>
           <router-link to="/mitglied-werden" class="btn-primary btn-large">
             Jetzt beitreten
@@ -147,12 +147,22 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useEventsStore } from '../stores/events'
 import { useNewsStore } from '../stores/news'
+import { useSEO } from '../composables/useSEO'
 import HgCard from '../components/HgCard.vue'
 import EventItem from '../components/EventItem.vue'
 import NewsCard from '../components/NewsCard.vue'
 import type { Event, NewsArticle } from '../lib/types'
 
 const router = useRouter()
+
+// SEO für Startseite optimieren
+const siteUrl = import.meta.env.VITE_SITE_URL || 'https://alumni-hg.de'
+useSEO({
+  title: 'HG Alumni - Alumni-Verein des Hainberg-Gymnasiums Göttingen',
+  description: 'HG Alumni Verein - Alumni-Verein des Hainberg-Gymnasiums Göttingen e.V. Verbinden Sie sich mit ehemaligen Schülern des Hainberg Gymnasiums und bleiben Sie in Kontakt.',
+  url: siteUrl,
+  keywords: ['HG Alumni', 'Hainberg Gymnasium Alumni', 'Hainberg-Gymnasium Alumni', 'HG Göttingen Alumni', 'Alumni HG', 'Alumni Hainberg', 'Hainberg Gymnasium', 'Hainberg-Gymnasium', 'HG Göttingen', 'Alumni-Verein', 'Ehemalige Schüler Hainberg', 'Göttingen Alumni']
+})
 
 // Stores verwenden
 const eventsStore = useEventsStore()
