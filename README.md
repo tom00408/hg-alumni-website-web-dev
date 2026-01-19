@@ -164,11 +164,40 @@ service cloud.firestore {
       allow write: if false;
     }
     
+    // Jahrgangs-Galerie (Lesen für alle, Schreiben nur für Jahrgangs-User)
+    match /jahrgang_gallery/{document} {
+      allow read: if true; // Öffentliche Preview
+      allow create: if request.auth != null && 
+                     isJahrgangUser() && 
+                     request.resource.data.jahrgang == getUserJahrgang();
+      allow update, delete: if request.auth != null && 
+                             isJahrgangUser() && 
+                             resource.data.uploadedBy == request.auth.uid;
+    }
+    
+    // Jahrgangs-Ordner (Lesen für alle, Schreiben nur für Jahrgangs-User)
+    match /jahrgang_folders/{document} {
+      allow read: if true; // Öffentliche Preview
+      allow write: if request.auth != null && isJahrgangUser();
+    }
+    
     // Hilfsfunktionen
     function isAdmin() {
       return request.auth != null && 
              exists(/databases/$(database)/documents/admins/$(request.auth.uid)) &&
              get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true;
+    }
+    
+    // Prüft ob User ein Jahrgangs-User ist
+    function isJahrgangUser() {
+      return request.auth != null &&
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'jahrgang';
+    }
+    
+    // Holt den Jahrgang des aktuellen Users
+    function getUserJahrgang() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.abiturjahrgang;
     }
   }
 }

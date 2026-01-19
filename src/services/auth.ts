@@ -6,8 +6,9 @@ import {
   updateProfile,
   type User
 } from 'firebase/auth'
-import { doc, setDoc, getDoc } from 'firebase/firestore'
+import { doc, setDoc, getDoc, Timestamp } from 'firebase/firestore'
 import { auth, db } from '../lib/firebase'
+import type { JahrgangRegisterData, JahrgangUser } from '../lib/types'
 
 export interface AuthUser {
   uid: string
@@ -140,6 +141,66 @@ export const getUserDocument = async (uid: string) => {
     return null
   } catch (error) {
     console.error('Error fetching user document:', error)
+    return null
+  }
+}
+
+// Registrierung für Jahrgangs-Bereich (nur Name, Email, Abiturjahrgang)
+export const registerJahrgangUser = async (data: JahrgangRegisterData): Promise<AuthUser> => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password)
+    const user = userCredential.user
+    
+    // Display Name setzen
+    const displayName = `${data.firstName} ${data.lastName}`
+    await updateProfile(user, { displayName })
+    
+    // Jahrgangs-User-Dokument in Firestore erstellen
+    const jahrgangUser: JahrgangUser = {
+      uid: user.uid,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      displayName: displayName,
+      abiturjahrgang: data.abiturjahrgang,
+      userType: 'jahrgang',
+      createdAt: Timestamp.now()
+    }
+    
+    await setDoc(doc(db, 'users', user.uid), jahrgangUser)
+    
+    return {
+      uid: user.uid,
+      email: user.email,
+      displayName: displayName
+    }
+  } catch (error: any) {
+    console.error('Jahrgang registration error:', error)
+    throw new Error(getAuthErrorMessage(error.code))
+  }
+}
+
+// Prüfen ob User ein Jahrgangs-User ist
+export const isJahrgangUser = async (uid: string): Promise<boolean> => {
+  try {
+    const userDoc = await getUserDocument(uid)
+    return userDoc?.userType === 'jahrgang'
+  } catch (error) {
+    console.error('Error checking jahrgang user:', error)
+    return false
+  }
+}
+
+// Jahrgangs-User-Daten abrufen
+export const getJahrgangUser = async (uid: string): Promise<JahrgangUser | null> => {
+  try {
+    const userDoc = await getUserDocument(uid)
+    if (userDoc && userDoc.userType === 'jahrgang') {
+      return userDoc as JahrgangUser
+    }
+    return null
+  } catch (error) {
+    console.error('Error fetching jahrgang user:', error)
     return null
   }
 }

@@ -159,3 +159,46 @@ export interface NavigationItem {
 	icon: string;
 	visibility: NavVisibility;
 }
+
+// Jahrgangs User Types
+export interface JahrgangUser {
+	uid: string;
+	firstName: string;
+	lastName: string;
+	displayName?: string;
+	email: string;
+	abiturjahrgang: number; // Jahr des Abiturs (z.B. 2020)
+	createdAt: Timestamp;
+	userType: 'jahrgang' | 'member'; // Unterscheidung zwischen Jahrgangs-User und Mitglied
+}
+
+export interface JahrgangRegisterData {
+	email: string;
+	password: string;
+	firstName: string;
+	lastName: string;
+	abiturjahrgang: number;
+}
+
+// Jahrgangs Galerie Types
+export interface JahrgangGalleryImage {
+	id?: string;
+	title?: string;
+	imageUrl: string;
+	thumbnailUrl?: string;
+	jahrgang: number; // Zu welchem Jahrgang gehört das Bild
+	folderId?: string | null; // Optional: Unterordner innerhalb des Jahrgangs
+	uploadedBy: string; // UID des Users
+	uploadedByName?: string; // Name des Users (Cache)
+	createdAt?: Timestamp;
+}
+
+export interface JahrgangFolder {
+	id?: string;
+	name: string;
+	description?: string;
+	jahrgang: number; // Zu welchem Jahrgang gehört der Ordner
+	coverImageId?: string;
+	createdAt?: Timestamp;
+	updatedAt?: Timestamp;
+}
