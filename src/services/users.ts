@@ -65,8 +65,13 @@ export const submitMembershipApplication = async (
       await setDoc(userDocRef, userData)
     }
     
-    // E-Mail-Benachrichtigung senden
-    await sendApplicationNotification(userData)
+    // E-Mail-Benachrichtigung senden (darf den Antrag nicht scheitern lassen,
+    // da die Daten bereits erfolgreich gespeichert wurden)
+    try {
+      await sendApplicationNotification(userData)
+    } catch (notificationError) {
+      console.error('Error sending application notification email:', notificationError)
+    }
     
     return userData
   } catch (error) {
