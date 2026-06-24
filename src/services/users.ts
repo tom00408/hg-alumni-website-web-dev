@@ -143,7 +143,7 @@ const sendApplicationNotification = async (user: User): Promise<void> => {
  */
 export const hasCompleteApplication = (user: User): boolean => {
   const requiredFields = [
-    'address', 'postalCode', 'city', 'birthDate', 'iban', 'bic', 
+    'address', 'postalCode', 'city', 'birthDate', 'iban',
     'placeDate', 'signature'
   ]
   

@@ -166,11 +166,15 @@
 								<input
 									id="birthDate"
 									v-model="form.birthDate"
-									type="date"
+									type="text"
+									inputmode="numeric"
+									maxlength="10"
+									placeholder="TT.MM.JJJJ"
 									class="form-input"
 									:class="{
 										'form-input--error': errors.birthDate,
 									}"
+									@input="formatDateInput($event, 'birthDate')"
 									required />
 								<span
 									v-if="errors.birthDate"
@@ -277,8 +281,12 @@
 										<input
 											id="schoolFrom"
 											v-model="form.schoolFrom"
-											type="date"
-											class="form-input" />
+											type="text"
+											inputmode="numeric"
+											maxlength="10"
+											placeholder="TT.MM.JJJJ"
+											class="form-input"
+											@input="formatDateInput($event, 'schoolFrom')" />
 									</div>
 									<div class="form-date-input">
 										<label
@@ -289,8 +297,12 @@
 										<input
 											id="schoolTo"
 											v-model="form.schoolTo"
-											type="date"
-											class="form-input" />
+											type="text"
+											inputmode="numeric"
+											maxlength="10"
+											placeholder="TT.MM.JJJJ"
+											class="form-input"
+											@input="formatDateInput($event, 'schoolTo')" />
 									</div>
 								</div>
 							</div>
@@ -345,22 +357,6 @@
 								}}</span>
 							</div>
 
-							<div class="form-field">
-								<label for="bic" class="form-label"
-									>BIC *</label
-								>
-								<input
-									id="bic"
-									v-model="form.bic"
-									type="text"
-									class="form-input"
-									:class="{ 'form-input--error': errors.bic }"
-									placeholder="COBADEFFXXX"
-									required />
-								<span v-if="errors.bic" class="form-error">{{
-									errors.bic
-								}}</span>
-							</div>
 						</div>
 
 						<!-- Unterschrift -->
@@ -504,6 +500,15 @@ const submitting = ref(false);
 const submitted = ref(false);
 const submitError = ref<string | null>(null);
 
+// "Ort, Datum" mit Göttingen und heutigem Datum vorausfüllen
+const getDefaultPlaceDate = () => {
+	const today = new Date();
+	const day = String(today.getDate()).padStart(2, '0');
+	const month = String(today.getMonth() + 1).padStart(2, '0');
+	const year = today.getFullYear();
+	return `Göttingen, ${day}.${month}.${year}`;
+};
+
 const form = reactive({
 	salutation: '',
 	firstName: '',
@@ -517,8 +522,7 @@ const form = reactive({
 	schoolFrom: '',
 	schoolTo: '',
 	iban: '',
-	bic: '',
-	placeDate: '',
+	placeDate: getDefaultPlaceDate(),
 	signature: '',
 	consent: false,
 	password: '',
@@ -556,6 +560,22 @@ const benefits = [
     </svg>`,
 	},
 ];
+
+// Datumsfelder automatisch als TT.MM.JJJJ formatieren
+const formatDateInput = (
+	event: Event,
+	field: 'birthDate' | 'schoolFrom' | 'schoolTo'
+) => {
+	const input = event.target as HTMLInputElement;
+	const digits = input.value.replace(/\D/g, '').slice(0, 8);
+	let formatted = digits;
+	if (digits.length > 4) {
+		formatted = `${digits.slice(0, 2)}.${digits.slice(2, 4)}.${digits.slice(4)}`;
+	} else if (digits.length > 2) {
+		formatted = `${digits.slice(0, 2)}.${digits.slice(2)}`;
+	}
+	form[field] = formatted;
+};
 
 const validateForm = () => {
 	errors.value = {};
@@ -600,18 +620,46 @@ const validateForm = () => {
 		errors.value.city = 'Ort muss mindestens 2 Zeichen lang sein';
 	}
 
-	// Geburtsdatum validieren
-	if (!form.birthDate) {
+	// Geburtsdatum validieren (Format TT.MM.JJJJ)
+	if (!form.birthDate.trim()) {
 		errors.value.birthDate = 'Geburtsdatum ist erforderlich';
 	} else {
-		const birthDate = new Date(form.birthDate);
-		const today = new Date();
-		const age = today.getFullYear() - birthDate.getFullYear();
-		if (age < 16) {
-			errors.value.birthDate = 'Sie müssen mindestens 16 Jahre alt sein';
-		} else if (age > 120) {
+		const match = form.birthDate
+			.trim()
+			.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+		if (!match) {
 			errors.value.birthDate =
-				'Bitte geben Sie ein gültiges Geburtsdatum ein';
+				'Bitte im Format TT.MM.JJJJ eingeben';
+		} else {
+			const day = parseInt(match[1], 10);
+			const month = parseInt(match[2], 10);
+			const year = parseInt(match[3], 10);
+			const birthDate = new Date(year, month - 1, day);
+			const isValidDate =
+				birthDate.getFullYear() === year &&
+				birthDate.getMonth() === month - 1 &&
+				birthDate.getDate() === day;
+			if (!isValidDate) {
+				errors.value.birthDate =
+					'Bitte geben Sie ein gültiges Datum ein';
+			} else {
+				const today = new Date();
+				let age = today.getFullYear() - year;
+				const monthDiff = today.getMonth() - (month - 1);
+				if (
+					monthDiff < 0 ||
+					(monthDiff === 0 && today.getDate() < day)
+				) {
+					age--;
+				}
+				if (age < 16) {
+					errors.value.birthDate =
+						'Sie müssen mindestens 16 Jahre alt sein';
+				} else if (age > 120) {
+					errors.value.birthDate =
+						'Bitte geben Sie ein gültiges Geburtsdatum ein';
+				}
+			}
 		}
 	}
 
@@ -632,18 +680,6 @@ const validateForm = () => {
 			errors.value.iban = 'IBAN muss genau 22 Zeichen haben';
 		} else if (!/^[A-Z]{2}\d{2}[A-Z0-9]{18}$/.test(cleanIban)) {
 			errors.value.iban = 'IBAN hat ein ungültiges Format';
-		}
-	}
-
-	// BIC validieren - 8 oder 11 Zeichen
-	if (!form.bic.trim()) {
-		errors.value.bic = 'BIC ist erforderlich';
-	} else {
-		const cleanBic = form.bic.replace(/\s/g, ''); // Leerzeichen entfernen
-		if (cleanBic.length !== 8 && cleanBic.length !== 11) {
-			errors.value.bic = 'BIC muss 8 oder 11 Zeichen haben';
-		} else if (!/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(cleanBic)) {
-			errors.value.bic = 'BIC hat ein ungültiges Format';
 		}
 	}
 
@@ -730,7 +766,6 @@ const submitApplication = async () => {
 				schoolFrom: form.schoolFrom || undefined,
 				schoolTo: form.schoolTo || undefined,
 				iban: form.iban,
-				bic: form.bic,
 				placeDate: form.placeDate,
 				signature: form.signature,
 			};
@@ -758,8 +793,7 @@ const submitApplication = async () => {
 				schoolFrom: '',
 				schoolTo: '',
 				iban: '',
-				bic: '',
-				placeDate: '',
+				placeDate: getDefaultPlaceDate(),
 				signature: '',
 				consent: false,
 				createAccount: true,

@@ -68,7 +68,7 @@ export interface User {
 
 	// Bankdaten
 	iban: string;
-	bic: string;
+	bic?: string;
 
 	// Application-spezifische Felder
 	placeDate?: string; // Nur bei Antrag

@@ -132,8 +132,12 @@
               <input 
                 v-if="isEditing"
                 v-model="editForm.birthDate"
-                type="date"
+                type="text"
+                inputmode="numeric"
+                maxlength="10"
+                placeholder="TT.MM.JJJJ"
                 class="form-input"
+                @input="formatDateInput"
               />
               <p v-else class="info-value">
                 {{ userDocument.birthDate ? formatDate(userDocument.birthDate) : 'Nicht angegeben' }}
@@ -248,9 +252,40 @@ const getMembershipStatusText = () => {
   }
 }
 
+// Geburtsdatum automatisch als TT.MM.JJJJ formatieren
+const formatDateInput = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const digits = input.value.replace(/\D/g, '').slice(0, 8)
+  let formatted = digits
+  if (digits.length > 4) {
+    formatted = `${digits.slice(0, 2)}.${digits.slice(2, 4)}.${digits.slice(4)}`
+  } else if (digits.length > 2) {
+    formatted = `${digits.slice(0, 2)}.${digits.slice(2)}`
+  }
+  editForm.value.birthDate = formatted
+}
+
 const formatDate = (dateString: string) => {
+  // Neues Format TT.MM.JJJJ direkt anzeigen
+  const match = dateString.match(/^(\d{2})\.(\d{2})\.(\d{4})$/)
+  if (match) {
+    const date = new Date(
+      parseInt(match[3], 10),
+      parseInt(match[2], 10) - 1,
+      parseInt(match[1], 10)
+    )
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleDateString('de-DE', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    }
+    return dateString
+  }
   try {
     const date = new Date(dateString)
+    if (isNaN(date.getTime())) return dateString
     return date.toLocaleDateString('de-DE', {
       year: 'numeric',
       month: 'long',
